@@ -1,0 +1,13 @@
+[requires]
+xerces-c/3.2.5
+sqlite3/3.46.0
+catch2/3.6.0
+lua/5.4.7
+log4cplus/2.1.1
+
+[generators]
+CMakeDeps
+CMakeToolchain
+
+[layout]
+cmake_layout

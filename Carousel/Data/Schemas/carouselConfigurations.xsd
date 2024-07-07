@@ -1,0 +1,37 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!-- Schemas -->
+<!--
+  This schema contains all configuration models that are used by the framework
+-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" 
+           targetNamespace="http://carousel.com/carousel/data"
+           xmlns="http://carousel.com/carousel/data"
+           elementFormDefault="qualified">
+
+
+  <!-- Carousel configurations -->
+  <xs:element name="CarouselConfiguration">
+    <xs:complexType>
+      <xs:sequence>
+        <!-- Database -->
+        <xs:element ref="DatabaseConfiguration"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+
+  <!-- Database configurations -->
+  <xs:element name="DatabaseConfiguration">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="selectedDatabase" type="DatabaseType"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  
+  <!-- Available database frameworks -->
+  <xs:simpleType name="DatabaseType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="SQLite3"/>
+    </xs:restriction>
+  </xs:simpleType>
+</xs:schema>
