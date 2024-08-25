@@ -21,6 +21,7 @@ foreach(target IN LISTS TEST_FILES)
     target_compile_features(${fname} PUBLIC cxx_std_17)
     target_compile_options(${fname} PRIVATE ${DEFAULT_COMPILER_OPTIONS_AND_WARNINGS})
     target_link_libraries(${fname} CarouselCore Catch2::Catch2WithMain SQLite::SQLite3 XercesC::XercesC lua::lua)
+    target_include_directories(${fname} PRIVATE "../")
 
     add_test(NAME ${fname} COMMAND ${fname})
 endforeach()

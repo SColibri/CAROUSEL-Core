@@ -1,10 +1,12 @@
 #include <iostream>
 #include <fstream>
 #include <catch2/catch_test_macros.hpp>
-#include "../Carousel/Data/SharedTypes/carouselModels.h"
-#include "../Carousel/Logging/CarouselLogger.h"
+#include "../Carousel/include/Data/SharedTypes/carouselModels.h"
+#include "../Carousel/include/Data/Models/Project.h"
+#include "../Carousel/include/Logging/CarouselLogger.h"
 
-TEST_CASE("AM_Config", "[classic]")
+
+TEST_CASE("Carousel Data Models", "[classic]")
 {
 	SECTION("Saving and loading file")
 	{
@@ -35,5 +37,29 @@ TEST_CASE("AM_Config", "[classic]")
 		carousel::logging::CarouselLogger::instance().Info("Testing log message");
 
 		REQUIRE(1 == 1);
+	}
+
+	SECTION("Projects")
+	{
+		// Initialize xerces which is used for serialization
+		xercesc::XMLPlatformUtils::Initialize();
+
+		// Initialize Project
+		carousel::data::Project project{};
+		int idValue = project.getId();
+		std::string projectName = project.getName();
+
+		REQUIRE(idValue == -1);
+		REQUIRE(projectName.length() > 0);
+
+		// Setters and getters
+		project.setId(100);
+		REQUIRE(project.getId() == 100);
+
+		project.setName("100");
+		REQUIRE(project.getName() == "100");
+
+		// Serialized Project
+		std::string serializedProject = project.serialize();
 	}
 }

@@ -10,8 +10,9 @@
 #        paths.
 # -----------------------------------------------------------------------------
 cmake_minimum_required (VERSION 3.8)
-set(CMAKE_CXX_STANDARD 17)
 project(CarouselCore VERSION 1.0.0 DESCRIPTION "CAROUSEL framework core library")
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # Use conan package manager
 # run: conan install . -s build_type=Debug --build missing
@@ -51,6 +52,7 @@ file(GLOB_RECURSE CAROUSEL_DATA_MODELS_H "Carousel/*.h")
 file(GLOB_RECURSE CAROUSEL_DATA_MODELS_CPP "Carousel/*.cpp")
 add_library(${PROJECT_NAME} STATIC ${CAROUSEL_DATA_MODELS_H} ${CAROUSEL_DATA_MODELS_CPP})
 target_link_libraries(${PROJECT_NAME} Catch2::Catch2WithMain SQLite::SQLite3 XercesC::XercesC lua::lua log4cplus::log4cplus)
+# target_include_directories(${PROJECT_NAME} PRIVATE "Carousel")
 
 add_subdirectory("Tests")
 

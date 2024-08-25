@@ -17,6 +17,6 @@ project(CarouselDataModels VERSION 1.0.0 DESCRIPTION "CAROUSEL framework data mo
 include(xsdFunctions.cmake)
 
 # Generate files using xsd
-set(SCHEMAS_DIR Data/Schemas)
-generate_files(${SCHEMAS_DIR}/carouselModels.xsd ${CMAKE_CURRENT_SOURCE_DIR}/Data/SharedTypes)
-generate_files(${SCHEMAS_DIR}/CarouselConfigurations.xsd ${CMAKE_CURRENT_SOURCE_DIR}/Data/SharedTypes)
+set(SCHEMAS_DIR include/Data/Schemas)
+generate_files(${SCHEMAS_DIR}/carouselModels.xsd ${CMAKE_CURRENT_SOURCE_DIR}/include/Data/SharedTypes)
+generate_files(${SCHEMAS_DIR}/CarouselConfigurations.xsd ${CMAKE_CURRENT_SOURCE_DIR}/include/Data/SharedTypes)

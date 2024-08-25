@@ -10,8 +10,8 @@
 #include <xercesc/util/PlatformUtils.hpp>
 #include <stdlib.h>
 #include <charconv>
-#include "../Carousel/Core/BaseTypes/XmlSerializable.h"
-#include "../Carousel/Helpers/ConvertToString.h"
+#include "../Carousel/include/Core/BaseTypes/XmlSerializable.h"
+#include "../Carousel/include/Helpers/Converters.h"
 
 /// <summary>
 /// Class used for testing the implementation of a XmlSerializable object
@@ -63,7 +63,7 @@ public:
 			[&](const std::string& newValue) {property3 = std::stoi(newValue); });
 
 		registerProperty("property4",
-			[&] {return carousel::helpers::convertToString(property4); },
+			[&] {return carousel::helpers::converters::convertToString(property4); },
 			[&](const std::string& newValue) {property4 = std::stod(newValue); });
 	}
 };
