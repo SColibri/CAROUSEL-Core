@@ -1,7 +1,7 @@
 #pragma once
 
 #include <catch2/catch_test_macros.hpp>
-#include "../Carousel/include/IpcTools/Ipc.h"
+#include "../Carousel/include/IpcTools/IpcPipeHandler.h"
 
 
 TEST_CASE("Ipc", "[classic]")
@@ -9,7 +9,7 @@ TEST_CASE("Ipc", "[classic]")
 	SECTION("Ipc connection")
 	{
 		//carousel::ipcTools::Ipc newIpc("./ConsoleMock.exe");
-		carousel::ipcTools::Ipc newIpc("C:\\Program Files\\MatCalc 6\\mcc.exe");
+		carousel::ipcTools::IpcPipeHandler newIpc("C:\\Program Files\\MatCalc 6\\mcc.exe", "MC: ", "", 10);
 		
 		std::string tz = newIpc.readCommand();
 
