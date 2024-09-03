@@ -10,16 +10,14 @@ TEST_CASE("Ipc", "[classic]")
 	{
 		//carousel::ipcTools::Ipc newIpc("./ConsoleMock.exe");
 		carousel::ipcTools::IpcPipeHandler newIpc("C:\\Program Files\\MatCalc 6\\mcc.exe", "MC: ", "", 10);
+		auto tzr = newIpc.isReady();
+
 		
-		std::string tz = newIpc.readCommand();
+		auto testy = newIpc.read();
 
-		std::string tz1 = newIpc.sendCommand("SendThisCommand of chars whoooohooo");
+		newIpc.send("Invalid content");
 
-		std::string tz2 = newIpc.readCommand();
-
-		std::string tz3 = newIpc.sendCommand("exit");
-
-		std::string tz4 = newIpc.readCommand();
+		auto testy4 = newIpc.read();
 
 	}
 }

@@ -51,9 +51,17 @@ include_directories(${XSD_INCLUDE_DIRS})
 add_subdirectory("Carousel")
 
 # Core library
-file(GLOB_RECURSE CAROUSEL_DATA_MODELS_H "Carousel/*.h")
-file(GLOB_RECURSE CAROUSEL_DATA_MODELS_CPP "Carousel/*.cpp")
-add_library(${PROJECT_NAME} STATIC ${CAROUSEL_DATA_MODELS_H} ${CAROUSEL_DATA_MODELS_CPP})
+file(GLOB_RECURSE CAROUSEL_INCLUDE_H "Carousel/*.h")
+file(GLOB_RECURSE CAROUSEL_INCLUDE_CPP "Carousel/*.cpp")
+file(GLOB_RECURSE CAROUSEL_PORTABLE_SOURCES "Carousel/Portable/*.cpp")
+
+if(_WIN32)
+	file(GLOB_RECURSE CAROUSEL_PORTABLE_SOURCES "Carousel/Windows/*.cpp")
+else()
+	# Todo: CMAKE exception here
+endif()
+
+add_library(${PROJECT_NAME} STATIC ${CAROUSEL_INCLUDE_H} ${CAROUSEL_INCLUDE_CPP} ${CAROUSEL_PORTABLE_SOURCES})
 target_link_libraries(${PROJECT_NAME} Catch2::Catch2WithMain SQLite::SQLite3 XercesC::XercesC lua::lua log4cplus::log4cplus Poco::Poco)
 # target_include_directories(${PROJECT_NAME} PRIVATE "Carousel")
 
