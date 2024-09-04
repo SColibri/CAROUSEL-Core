@@ -1,5 +1,6 @@
 #pragma once
 #include "../../../include/IpcTools/IpcPipeHandler.h"
+#include "../../../include/Exceptions/IpcCommunicationException.h"
 #include <thread>
 #include <future>
 
@@ -29,14 +30,15 @@ namespace carousel
 
 			// Wait for process to finish initialization
 			std::future_status status = future.wait_for(std::chrono::seconds(_timeout));
-			if (status != std::future_status::ready) 
-			{
-				throw std::runtime_error("Timeout: Process not ready within the expected time.");
-			}
-
+			
 			// Cleanup
 			keepWaiting = false;
 			waitThread.join();
+			
+			if (status != std::future_status::ready) 
+			{
+				throw carousel::exceptions::IpcCommunicationException("Timeout: Process not ready within the expected time.");
+			}
 		}
 #pragma endregion
 	}

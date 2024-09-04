@@ -1,5 +1,6 @@
-#pragma once
 #include "../../../include/IpcTools/IpcPipeHandler.h"
+#include "../../../include/Exceptions/IpcCommunicationException.h"
+#include "../../../include/Logging/CarouselLogger.h"
 #include <Windows.h>
 #include <thread>
 #include <future>
@@ -9,23 +10,24 @@ namespace carousel
 	namespace ipcTools
 	{
 #pragma region Constructor&Destructor
-		/// <summary>
-		/// Constructor
-		/// </summary>
 		IpcPipeHandler::IpcPipeHandler(std::string pathToExe, std::string endFlag, std::string parameters, int timeout) :
 			_pathToExe(std::move(pathToExe)),
 			_parameters(std::move(parameters)),
 			_endFlag(std::move(endFlag)),
 			_timeout(timeout)
 		{
-			// Shoot thread
+			// Initialize default handles
+			_pipeWriteIn = NULL;
+			_pipeReadOut = NULL;
+			_pipeWriteOut = NULL;
+			_pipeReadIn = NULL;
+			_processHandle = NULL;
+
+			// Shoot initialization thread
 			std::thread initThread(&IpcPipeHandler::startProcess, this);
 			initThread.detach();
 		}
 
-		/// <summary>
-		/// 
-		/// </summary>
 		IpcPipeHandler::~IpcPipeHandler()
 		{
 			closeProcess();
@@ -33,19 +35,17 @@ namespace carousel
 #pragma endregion
 
 #pragma region Methods
-		bool IpcPipeHandler::isReady()
+		bool IpcPipeHandler::isReady() const
 		{
 			DWORD exitCode = STATUS_CONTROL_C_EXIT;
 
 			if (!GetExitCodeProcess(_processHandle, &exitCode))
 			{
-				// Todo: Log status
+				carousel::logging::CarouselLogger::instance().warning("IpcPipeHandler::isReady returned process exit code '" + std::to_string(exitCode) + "'");
 			}
 
 			return _processReady && (exitCode == STILL_ACTIVE);
 		}
-
-		
 
 		void IpcPipeHandler::send(const std::string& command)
 		{
@@ -71,10 +71,10 @@ namespace carousel
 					std::this_thread::sleep_for(std::chrono::milliseconds(100));
 				} while (pipeOutput.length() > 0 && result.rfind(_endFlag) == std::string::npos);
 			}
-			else 
+			else
 			{
 				// Connection is broken
-				throw std::runtime_error("IpcPipeHandler::read - Communication to process is broken.");
+				throw carousel::exceptions::IpcCommunicationException("IpcPipeHandler::read - Communication to process is broken.");
 			}
 
 			return result;
@@ -104,32 +104,43 @@ namespace carousel
 
 			// Try create new subprocess
 			bool bSuccess = CreateProcessA(NULL,
-				zt,     // command line 
+				zt,					 // command line 
 				NULL,				 // process security attributes 
 				NULL,				 // primary thread security attributes 
 				TRUE,				 // handles are inherited 
 				CREATE_NO_WINDOW,    // creation flags 
 				NULL,				 // use parent's environment 
-				NULL,          // use parent's current directory 
-				&startup_info,  // STARTUPINFO pointer 
-				&process_info);  // receives PROCESS_INFORMATION 
+				NULL,				 // use parent's current directory 
+				&startup_info,		 // STARTUPINFO pointer 
+				&process_info);		 // receives PROCESS_INFORMATION 
 
-			_processHandle = process_info.hProcess;
-			_processId = process_info.dwProcessId;
-
-			// Wait for process to finish initialization
-			std::string pipeData{ "" };
-			while (pipeData.length() == 0)
+			// If initializing the process was successful then
+			// then read the initialization output from the process.
+			if (bSuccess)
 			{
-				// wait for process
-				std::this_thread::sleep_for(std::chrono::milliseconds(_initProcTime));
-				pipeData = readFromPipe(_pipeReadOut);;
+				_processHandle = process_info.hProcess;
+				_processId = process_info.dwProcessId;
+
+				// Wait for process to finish initialization
+				std::string pipeData{ "" };
+				while (pipeData.length() == 0)
+				{
+					// wait for process
+					std::this_thread::sleep_for(std::chrono::milliseconds(_initProcTime));
+					pipeData = readFromPipe(_pipeReadOut);;
+				}
+
+				_processReady = true;
 			}
-
-			CloseHandle(_pipeWriteOut);
-			CloseHandle(_pipeReadIn);
-
-			_processReady = true;
+			else 
+			{
+				// Process did not initialize, clear handles
+				_pipeWriteIn = NULL;
+				_pipeReadOut = NULL;
+				_pipeWriteOut = NULL;
+				_pipeReadIn = NULL;
+				_processHandle = NULL;
+			}
 
 			// cleanup
 			delete[] zt;
@@ -140,10 +151,19 @@ namespace carousel
 			// Close all other handles
 			CloseHandle(_pipeWriteIn);
 			CloseHandle(_pipeReadOut);
+			CloseHandle(_pipeWriteOut);
+			CloseHandle(_pipeReadIn);
 
 			// Force closing process
 			UINT uExitCode = -1;
 			TerminateProcess(_processHandle, uExitCode);
+
+			// set null
+			_pipeWriteIn = NULL;
+			_pipeReadOut = NULL;
+			_pipeWriteOut = NULL;
+			_pipeReadIn = NULL;
+			_processHandle = NULL;
 		}
 
 		void IpcPipeHandler::createPipes()
@@ -160,8 +180,10 @@ namespace carousel
 			CreatePipe(&_pipeReadOut, &_pipeWriteOut, &security_attrib, 0);
 			SetHandleInformation(_pipeReadOut, HANDLE_FLAG_INHERIT, 0);
 		}
+#pragma endregion
 
-		std::string IpcPipeHandler::readFromPipe(SystemHandle pipe)
+#pragma region Helpers
+		std::string IpcPipeHandler::readFromPipe(SystemHandle pipeReadOut)
 		{
 			// Result
 			std::stringstream pipeData;
@@ -173,10 +195,10 @@ namespace carousel
 			// While data is contained in the pipe, get data from the pipe.
 			// Note: PeekNamedPipe checks if data is available before calling the
 			//		 ReadFile method. This avoids a possible deadlock.
-			while (PeekNamedPipe(pipe, NULL, 0, NULL, &bytesAvailable, NULL) > 0)
+			while (PeekNamedPipe(pipeReadOut, NULL, 0, NULL, &bytesAvailable, NULL) > 0)
 			{
 				if (bytesAvailable == 0) break;
-				bool readSuccess = ReadFile(pipe, buffer, sizeof(BUFFER_SIZE), &bytesRead, NULL);
+				bool readSuccess = ReadFile(pipeReadOut, buffer, sizeof(BUFFER_SIZE), &bytesRead, NULL);
 
 				if (!readSuccess || bytesRead == 0) break;
 				pipeData.write(buffer, bytesRead);
@@ -185,7 +207,7 @@ namespace carousel
 			return pipeData.str();
 		}
 
-		void IpcPipeHandler::writeToPipe(const std::string& command, SystemHandle pipeInWrite)
+		void IpcPipeHandler::writeToPipe(const std::string& command, SystemHandle pipeWriteIn)
 		{
 			DWORD dwWritten;
 			BOOL bSuccess = FALSE;
@@ -199,7 +221,7 @@ namespace carousel
 
 				// Write the data to the pipe
 				bSuccess = WriteFile(
-					pipeInWrite,					  // Handle to the pipe
+					pipeWriteIn,					  // Handle to the pipe
 					command.c_str() + totalWritten,   // Pointer to the current position in the string
 					static_cast<DWORD>(toWrite),      // Number of bytes to write
 					&dwWritten,                       // Number of bytes actually written
@@ -212,8 +234,5 @@ namespace carousel
 			}
 		}
 #pragma endregion
-
-
-
 	}
 }

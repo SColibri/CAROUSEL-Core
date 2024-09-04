@@ -1,7 +1,6 @@
 #pragma once
+
 #include <string>
-#include <sstream>
-#include <future>
 #include "../Core/Interfaces/Ipc.h"
 #include "../Logging/CarouselLogger.h"
 
@@ -107,7 +106,7 @@ namespace carousel
 			/// <summary>
 			/// Returns true if communication channel is ready
 			/// </summary>
-			bool isReady();
+			bool isReady() const;
 
 			/// <summary>
 			/// Send command to process
@@ -146,12 +145,12 @@ namespace carousel
 			/// <summary>
 			/// Reads from pipe
 			/// </summary>
-			std::string readFromPipe(SystemHandle pipe);
+			std::string readFromPipe(SystemHandle pipeReadOut);
 
 			/// <summary>
 			/// Writes to pipe
 			/// </summary>
-			void writeToPipe(const std::string& command, SystemHandle pipeInWrite);
+			void writeToPipe(const std::string& command, SystemHandle pipeWriteIn);
 		};
 	}
 }
