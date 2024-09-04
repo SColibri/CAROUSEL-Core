@@ -19,8 +19,7 @@ function(generate_files schema_file output_directory)
              --generate-ostream
              --generate-comparison
              --root-element-all
-             --output-dir ${output_directory}
-             ${schema_file}
+             --output-dir ${output_directory} ${schema_file}
         WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
         RESULT_VARIABLE XSD_RESULT
         OUTPUT_VARIABLE XSD_OUTPUT

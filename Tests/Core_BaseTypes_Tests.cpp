@@ -13,6 +13,7 @@
 #include "../Carousel/include/Core/BaseTypes/XmlSerializable.h"
 #include "../Carousel/include/Helpers/Converters.h"
 
+
 /// <summary>
 /// Class used for testing the implementation of a XmlSerializable object
 /// </summary>
@@ -127,6 +128,5 @@ TEST_CASE("Core_Base_types", "[classic]")
 		// Exception should be thrown, since the file to be loaded
 		// corresponds to another structure
 		REQUIRE_THROWS_AS(exampleIncorrectStructure.loadFromXml("SerializableTest.xml"), std::runtime_error);
-
 	}
 }

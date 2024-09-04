@@ -13,6 +13,7 @@
 #include <log4cplus/helpers/loglog.h>
 #include <log4cplus/helpers/stringhelper.h>
 #include <log4cplus/helpers/property.h>
+#include <mutex>
 
 namespace carousel
 {
@@ -29,7 +30,15 @@ namespace carousel
 			/// </summary>
 			log4cplus::Logger _log4cpp;
 
+			/// <summary>
+			/// True if logger is initialized
+			/// </summary>
 			bool _isInitialized{ false };
+
+			/// <summary>
+			/// Logging mutex
+			/// </summary>
+			std::mutex _logMutex;
 
 			/// <summary>
 			/// Private constructor (Singleton)
@@ -116,6 +125,7 @@ namespace carousel
 			{
 				if (_isInitialized)
 				{
+					std::lock_guard<std::mutex> guard(_logMutex);
 					LOG4CPLUS_INFO(_log4cpp, message.c_str());
 				}
 			}
@@ -128,6 +138,7 @@ namespace carousel
 			{
 				if (_isInitialized)
 				{
+					std::lock_guard<std::mutex> guard(_logMutex);
 					LOG4CPLUS_DEBUG(_log4cpp, message.c_str());
 				}
 			}
@@ -140,6 +151,7 @@ namespace carousel
 			{
 				if (_isInitialized)
 				{
+					std::lock_guard<std::mutex> guard(_logMutex);
 					LOG4CPLUS_ERROR(_log4cpp, message.c_str());
 				}
 			}
@@ -152,6 +164,7 @@ namespace carousel
 			{
 				if (_isInitialized)
 				{
+					std::lock_guard<std::mutex> guard(_logMutex);
 					LOG4CPLUS_WARN(_log4cpp, message.c_str());
 				}
 			}

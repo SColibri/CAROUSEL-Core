@@ -1,5 +1,5 @@
 
-#include "../../../include/Data/Database/Sqlite3Database.h"
+#include "../../../../include/Data/Database/Sqlite3Database.h"
 #include <sstream>
 
 namespace carousel
@@ -33,7 +33,7 @@ namespace carousel
 			else
 			{
 				sqlite3_close(db);
-				carousel::logging::CarouselLogger::instance().Info("Connecting to database was not possible: " + std::string(sqlite3_errmsg(db)));
+				carousel::logging::CarouselLogger::instance().warning("Connecting to database was not possible: " + std::string(sqlite3_errmsg(db)));
 				throw carousel::exceptions::DatabaseNotConnectedException();
 			}
 		}
@@ -60,6 +60,7 @@ namespace carousel
 		{
 			if (!_connectionOpen)
 			{
+				carousel::logging::CarouselLogger::instance().warning("Connecting to database failed because there is currently no open connection.");
 				throw carousel::exceptions::DatabaseNotConnectedException();
 			}
 
@@ -70,6 +71,7 @@ namespace carousel
 			int returnCode = sqlite3_prepare_v2(db, query.c_str(), -1, &stmt, 0);
 			if (returnCode == SQLITE_OK) {
 
+				carousel::logging::CarouselLogger::instance().Info("getTableNames was executed successfully.");
 				while (sqlite3_step(stmt) == SQLITE_ROW)
 				{
 					const unsigned char* text = sqlite3_column_text(stmt, 0);
@@ -78,7 +80,9 @@ namespace carousel
 			}
 			else
 			{
-				throw carousel::exceptions::DatabaseQueryFailed(sqlite3_errmsg(db));
+				std::string errMessage = sqlite3_errmsg(db);
+				carousel::logging::CarouselLogger::instance().warning(errMessage);
+				throw carousel::exceptions::DatabaseQueryFailed(errMessage);
 			}
 
 			sqlite3_finalize(stmt);
@@ -92,7 +96,9 @@ namespace carousel
 			// Check columns
 			if (columnCount == 0)
 			{
-				throw carousel::exceptions::DatabaseQueryFailed("Malformed database table for table '" + newTable->getTableName() + "', contained columns is zero.");
+				std::string errMessage = "Malformed database table for table '" + newTable->getTableName() + "', contained columns is zero.";
+				carousel::logging::CarouselLogger::instance().warning(errMessage);
+				throw carousel::exceptions::DatabaseQueryFailed(errMessage);
 			}
 
 			// Query definition
@@ -124,26 +130,35 @@ namespace carousel
 
 			// End query
 			query += " )";
+			carousel::logging::CarouselLogger::instance().Info(query);
 
 			// Execute query
 			int Response = sqlite3_exec(db, query.c_str(), NULL, NULL, &_errorMessage);
 			if (Response != SQLITE_OK)
 			{
-				throw carousel::exceptions::DatabaseQueryFailed(sqlite3_errmsg(db));
+				std::string errMessage = sqlite3_errmsg(db);
+				carousel::logging::CarouselLogger::instance().warning(errMessage);
+				throw carousel::exceptions::DatabaseQueryFailed(errMessage);
 			}
+			
+			carousel::logging::CarouselLogger::instance().Info("Table " + newTable->getTableName() + " was created successfully.");
 		}
 
 		void Sqlite3Database::dropTable(DatabaseTable* tableName)
 		{
 			// Query definition
-			std::string Query = "DROP TABLE \'" + tableName->getTableName() + "\'";
+			std::string query = "DROP TABLE \'" + tableName->getTableName() + "\'";
+			carousel::logging::CarouselLogger::instance().Info(query);
 
 			// Execute query
-			int Response = sqlite3_exec(db, Query.c_str(), NULL, NULL, &_errorMessage);
-			if (Response != SQLITE_OK)
+			int response = sqlite3_exec(db, query.c_str(), NULL, NULL, &_errorMessage);
+			if (response != SQLITE_OK)
 			{
+				carousel::logging::CarouselLogger::instance().warning(_errorMessage);
 				throw carousel::exceptions::DatabaseQueryFailed(std::string(_errorMessage));
 			}
+
+			carousel::logging::CarouselLogger::instance().Info("Table " + tableName->getTableName() + " was dropped successfully.");
 		}
 
 		bool Sqlite3Database::isNewEntry(DatabaseTable* tableData, IDatabaseObject* object)
@@ -167,6 +182,7 @@ namespace carousel
 		void Sqlite3Database::save(IDatabaseObject* object)
 		{
 			DatabaseTable table = object->get_table_structure();
+			carousel::logging::CarouselLogger::instance().Info("Saving IDatabaseObject: " + table.getTableName());
 
 			// check if this is a new constraint
 			bool isNew = isNewEntry(&table, object);
@@ -186,7 +202,9 @@ namespace carousel
 			int result = sqlite3_exec(db, queryStream.str().c_str(), NULL, NULL, &_errorMessage);
 			if (result != SQLITE_OK)
 			{
-				throw carousel::exceptions::DatabaseQueryFailed(std::string(_errorMessage) + ", using the query: " + queryStream.str());
+				std::string errMessage = std::string(_errorMessage) + ", using the query: " + queryStream.str();
+				carousel::logging::CarouselLogger::instance().Info(errMessage);
+				throw carousel::exceptions::DatabaseQueryFailed(errMessage);
 			}
 
 			// Update primary key value
