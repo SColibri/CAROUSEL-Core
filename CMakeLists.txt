@@ -38,15 +38,18 @@ find_package(SQLite3 REQUIRED)
 # Logger service
 find_package(log4cplus REQUIRED)
 
-# Poco
-find_package(Poco REQUIRED)
+# Python bindings
+find_package(Python3 REQUIRED COMPONENTS Interpreter Development)
+find_package(pybind11 REQUIRED)
 
 # Define environment XSD_INCLUDE_DIRS
 set(XSD_INCLUDE_DIRS $ENV{XSD_INCLUDE_DIRS} CACHE PATH "Path to XSD include directory")
 set(XSD_BIN $ENV{XSD_BIN} CACHE PATH "Path to XSD include directory")
 message("XSD bin path is: ${XSD_BIN}")
 message("XSD include path is: ${XSD_INCLUDE_DIRS}")
+message("Python3 include Dirs are found: ${Python3_INCLUDE_DIRS}")
 
+include_directories(${Python3_INCLUDE_DIRS})
 include_directories(${XSD_INCLUDE_DIRS})
 add_subdirectory("Carousel")
 
@@ -62,8 +65,8 @@ else()
 endif()
 
 add_library(${PROJECT_NAME} STATIC ${CAROUSEL_INCLUDE_H} ${CAROUSEL_INCLUDE_CPP} ${CAROUSEL_PORTABLE_SOURCES})
-target_link_libraries(${PROJECT_NAME} Catch2::Catch2WithMain SQLite::SQLite3 XercesC::XercesC lua::lua log4cplus::log4cplus Poco::Poco)
-# target_include_directories(${PROJECT_NAME} PRIVATE "Carousel")
+link_directories(${Python3_LIBRARY_DIRS})
+target_link_libraries(${PROJECT_NAME} Catch2::Catch2WithMain SQLite::SQLite3 XercesC::XercesC lua::lua log4cplus::log4cplus pybind11_pybind11_module_DEPS_TARGET)
 
 add_subdirectory("Tests")
 

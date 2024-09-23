@@ -20,3 +20,22 @@ include(xsdFunctions.cmake)
 set(SCHEMAS_DIR include/Data/Schemas)
 generate_files(${SCHEMAS_DIR}/carouselModels.xsd ${CMAKE_CURRENT_SOURCE_DIR}/include/Data/SharedTypes)
 generate_files(${SCHEMAS_DIR}/CarouselConfigurations.xsd ${CMAKE_CURRENT_SOURCE_DIR}/include/Data/SharedTypes)
+
+set(SCRIPTING_DIR include/Scripting)
+execute_process(
+	COMMAND Python3 ${CMAKE_CURRENT_SOURCE_DIR}/pythonBindings.py 
+					${CMAKE_CURRENT_SOURCE_DIR}/include/Data/Models/Project.h 
+					${CMAKE_CURRENT_SOURCE_DIR}/${SCRIPTING_DIR}/ProjectPythonBindings.h
+					../../include/Data/Models/Project.h
+					Project
+					carousel::data
+	RESULT_VARIABLE bindingResult
+)
+
+# Check the result of execute_process
+if(NOT bindingResult EQUAL 0)
+    message(FATAL_ERROR "Python script execution failed with result: ${bindingResult}")
+endif()
+
+# TODO: check if creating the module is require in future
+# pybind11_add_module(carouselModule Include/Scripting/CarouselPythonCore.cpp)

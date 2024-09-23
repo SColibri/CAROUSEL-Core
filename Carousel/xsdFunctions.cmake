@@ -7,9 +7,9 @@
 # Brief: Generates .cpp and .h files using xsd code generator
 # -----------------------------------------------------------------------------
 function(generate_files schema_file output_directory)
-
+    message("XSD is in ${XSD_BIN}")
     execute_process( 
-        COMMAND ${XSD_BIN}
+        COMMAND ${XSD_BIN}/xsd.exe
              cxx-tree
              --std=c++17
              --type-naming knr

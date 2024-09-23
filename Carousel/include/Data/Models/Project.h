@@ -42,7 +42,8 @@ namespace carousel
 				registerProperty("SoftwareName", [&] {return getSoftwareName(); }, [&](const std::string& newValue) {setSoftwareName(newValue); });
 			}
 
-		public:
+		public: // Tags: #python
+
 			/// <summary>
 			/// Get Id
 			/// </summary>
@@ -53,6 +54,7 @@ namespace carousel
 			/// Set Id
 			/// </summary>
 			/// <param name="newValue"></param>
+			/// <tag>#pythonProperty</tag>
 			void setId(const int& newValue) { _model.Id().set(newValue); }
 
 			/// <summary>
@@ -65,6 +67,7 @@ namespace carousel
 			/// Set name
 			/// </summary>
 			/// <param name="newName"></param>
+			/// <tag>#pythonProperty</tag>
 			void setName(const std::string& newName) { _model.Name().set(newName); }
 
 			/// <summary>
@@ -77,6 +80,7 @@ namespace carousel
 			/// Set api name that is being used
 			/// </summary>
 			/// <param name="newName"></param>
+			/// <tag>#pythonProperty</tag>
 			void setApiName(const std::string& newName) { _model.ApiName().set(newName); }
 
 			/// <summary>
@@ -89,10 +93,15 @@ namespace carousel
 			/// Set name of software used for all calculations
 			/// </summary>
 			/// <param name="newName"></param>
+			/// <tag>#pythonProperty</tag>
 			void setSoftwareName(const std::string& newName) { _model.SoftwareName().set(newName); }
 
 		public: // IDatabaseObject implementation
 
+			/// <summary>
+			/// 
+			/// </summary>
+			/// <tag>#pythonMethod</tag>
 			virtual int load(std::vector<std::string>& rawData) override
 			{
 				setId(-1);
@@ -105,6 +114,10 @@ namespace carousel
 				return 0;
 			}
 
+			/// <summary>
+			/// 
+			/// </summary>
+			/// <tag>#pythonMethod</tag>
 			virtual carousel::data::DatabaseTable& get_table_structure() override
 			{
 				static carousel::data::DatabaseTable table("Project");
