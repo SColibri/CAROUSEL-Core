@@ -18,6 +18,7 @@ namespace carousel
 			/// <summary>
 			/// Says hello
 			/// </summary>
+			/// <tag>#pythonMethod</tag>
 			std::string hello_carousel() {
 				return "Hi from CAROUSEL core module :)";
 			}

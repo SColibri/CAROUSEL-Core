@@ -24,11 +24,10 @@ generate_files(${SCHEMAS_DIR}/CarouselConfigurations.xsd ${CMAKE_CURRENT_SOURCE_
 set(SCRIPTING_DIR include/Scripting)
 execute_process(
 	COMMAND Python3 ${CMAKE_CURRENT_SOURCE_DIR}/pythonBindings.py 
-					${CMAKE_CURRENT_SOURCE_DIR}/include/Data/Models/Project.h 
-					${CMAKE_CURRENT_SOURCE_DIR}/${SCRIPTING_DIR}/ProjectPythonBindings.h
-					../../include/Data/Models/Project.h
-					Project
-					carousel::data
+					${CMAKE_CURRENT_SOURCE_DIR}/${SCRIPTING_DIR}
+					CarouselData
+					${CMAKE_CURRENT_SOURCE_DIR}/include/Data/Models/Project.h
+					${CMAKE_CURRENT_SOURCE_DIR}/include/Core/BaseTypes/CarouselSandbox.h 
 	RESULT_VARIABLE bindingResult
 )
 
