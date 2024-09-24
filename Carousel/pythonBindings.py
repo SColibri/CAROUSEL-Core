@@ -102,6 +102,18 @@ def get_list_of_imports(mappedList):
     
     return list(importList)
 
+# returns mapped properties and methods
+def get_mapped_items(content):
+    # Find all tags
+    allMethods = re.findall(r'\/\/\/\s*<summary>\s*([\s\S]*?)\s*\/\/\/\s<\/summary>\s+(\/\/\/\s<returns>(.*?)<\/returns>\s+)?(\/\/\/\s<param(.*?)<\/param>\s+)?(\/\/\/\s<tag(.*?)<\/tag>\s+)?(.*?)(\w+)\((.*?)(\w+)?\)', content)
+
+    # Map al matches into a dictionary
+    mappedResults = [match_to_dict(match) for match in allMethods]
+    mappedMethods = [result for result in mappedResults if '#pythonMethod' in result['tag']]
+    mappedProperties = [result for result in mappedResults if '#pythonProperty' in result['tag']]
+    
+    return [mappedResults, mappedMethods, mappedProperties]
+
 # returns the pybind11 class deifintion that exposes a c++ class to python
 def get_pybind_class_definition(file, classNamespace, className, mappedProperties, mappedMethods):
     file.write(f"\t\t    pybind11::class_<{classNamespace}::{className}>(carouselModule, \"{className}\")\n")
@@ -136,82 +148,9 @@ def get_pybind_class_definition(file, classNamespace, className, mappedPropertie
     #eof
     file.write('\t\t        ;\n')
 
-# -----------------------------------------------------------------------------
-#                                   PYTHON BINDINGS
-# -----------------------------------------------------------------------------
-
-# Map input
-headerFile = sys.argv[1]
-outputFile = sys.argv[2]
-headerInclude = sys.argv[3]
-className = sys.argv[4]
-classNamespace = sys.argv[5]
-
-# Read header file
-with open(headerFile, 'r') as file:
-    content = file.read()
-
-# Find all tags
-allMethods = re.findall(r'\/\/\/\s*<summary>\s*([\s\S]*?)\s*\/\/\/\s<\/summary>\s+(\/\/\/\s<returns>(.*?)<\/returns>\s+)?(\/\/\/\s<param(.*?)<\/param>\s+)?(\/\/\/\s<tag(.*?)<\/tag>\s+)?(.*?)(\w+)\((.*?)(\w+)?\)', content)
-
-# Map al matches into a dictionary
-mappedResults = [match_to_dict(match) for match in allMethods]
-mappedMethods = [result for result in mappedResults if '#pythonMethod' in result['tag']]
-mappedProperties = [result for result in mappedResults if '#pythonProperty' in result['tag']]
-
-# Create binding file
-with open(outputFile, 'w') as file:
-    
-    # Create file and add includes
-    file.write('#pragma once\n')
-    file.write('#include <pybind11/pybind11.h>\n')
-    file.write(f'#include \"{headerInclude}\"\n\n')
-    file.write('namespace carousel \n {\n')
-    file.write('\tnamespace scripting \n\t{\n')
-    
-    # Create static method used for exposing the methods
-    file.write('\t\tstatic void expose_models(pybind11::module& carouselModule) {\n')
-    file.write(f"\t\t    pybind11::class_<{classNamespace}::{className}>(carouselModule, \"{className}\")\n")
-
-    # Add default constructor
-    file.write('\t\t        .def(pybind11::init<>())\n')
-
-    # Add properties 
-    for mappedProperty in mappedProperties:
-        methodName = mappedProperty['method_name']
-        parameterName = mappedProperty['parameter_name']
-        
-        # Setter method should have one parameter
-        if not parameterName:
-            raise Exception(f'Property tag #pythonProperty should be set on a set method with one parameter: Method - {methodName} || {classNamespace}::{className}')
-
-        lineToAdd = f"\t\t        .def_property(\"{methodName.replace('set','')}\", &{classNamespace}::{className}::{methodName}, &{classNamespace}::{className}::{methodName.replace('set', 'get')})\n"
-        file.write(lineToAdd)
-
-    # Add method matches (TODO: do we need more than one parameter?)
-    for mappedMethod in mappedMethods:
-        methodName = mappedMethod['method_name']
-        parameterName = mappedMethod['parameter_name']
-        
-        if parameterName:
-            lineToAdd = f"\t\t        .def(\"{methodName}\", &{classNamespace}::{className}::{methodName}, pybind11::arg(\"{parameterName}\"))\n"
-        else:
-            lineToAdd = f"\t\t        .def(\"{methodName}\", &{classNamespace}::{className}::{methodName})\n"
-        file.write(lineToAdd)
-        print(f'{lineToAdd}')
-        
-    #eof
-    file.write('\t\t        ;\n')
-    file.write('\t\t}\n\t}\n}')
-    
-# Create stub file
-with open(outputFile.replace(".h",".pyi"), 'w') as file:
-    # Add Imports
-    importList = get_list_of_imports(mappedResults)
-    for importItem in importList:
-        file.write(f'{importItem}\n')
-
-    # Create class structure
+# returns the python stubbed class for IDE intellisense
+def get_python_class_definition(file, content, className, mappedProperties, mappedMethods):
+     # Create class structure
     file.write('\n\n')
     file.write(f'class {className}:\n')
     
@@ -241,3 +180,45 @@ with open(outputFile.replace(".h",".pyi"), 'w') as file:
             file.write(f'\tdef {methodName}(self, {parameterName} : {parameterType}): ... \n')
         
         file.write(f'\t"""\n\t{methodDescription.replace("///","")}\n\t"""\n\n')
+
+# -----------------------------------------------------------------------------
+#                                   PYTHON BINDINGS
+# -----------------------------------------------------------------------------
+
+# Map input
+headerFile = sys.argv[1]
+outputFile = sys.argv[2]
+headerInclude = sys.argv[3]
+className = sys.argv[4]
+classNamespace = sys.argv[5]
+
+# Read header file
+with open(headerFile, 'r') as file:
+    content = file.read()
+
+[mappedResults, mappedMethods, mappedProperties] = get_mapped_items(content)
+
+# Create binding file
+with open(outputFile, 'w') as file:
+    
+    # Create file and add includes
+    file.write('#pragma once\n')
+    file.write('#include <pybind11/pybind11.h>\n')
+    file.write(f'#include \"{headerInclude}\"\n\n')
+    file.write('namespace carousel \n {\n')
+    file.write('\tnamespace scripting \n\t{\n')
+    
+    # Create static method used for exposing the methods
+    file.write('\t\tstatic void expose_models(pybind11::module& carouselModule) {\n')
+    get_pybind_class_definition(file, classNamespace, className, mappedProperties, mappedMethods)
+    file.write('\t\t}\n\t}\n}')
+    
+# Create stub file
+with open(outputFile.replace(".h",".pyi"), 'w') as file:
+    # Add Imports
+    importList = get_list_of_imports(mappedResults)
+    for importItem in importList:
+        file.write(f'{importItem}\n')
+
+    # Create class structure
+    get_python_class_definition(file, content, className, mappedProperties, mappedMethods)
