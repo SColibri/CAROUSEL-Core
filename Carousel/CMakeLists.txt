@@ -27,7 +27,8 @@ execute_process(
 					${CMAKE_CURRENT_SOURCE_DIR}/${SCRIPTING_DIR}
 					CarouselData
 					${CMAKE_CURRENT_SOURCE_DIR}/include/Data/Models/Project.h
-					${CMAKE_CURRENT_SOURCE_DIR}/include/Core/BaseTypes/CarouselSandbox.h 
+					${CMAKE_CURRENT_SOURCE_DIR}/include/Core/BaseTypes/CarouselSandbox.h
+					${CMAKE_CURRENT_SOURCE_DIR}/include/Logging/CarouselLogger.h
 	RESULT_VARIABLE bindingResult
 )
 

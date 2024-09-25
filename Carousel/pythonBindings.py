@@ -9,11 +9,11 @@
 # Available Tags:
 # - #pythonMethod ; Exposes method to python (Note: for now only allows one parameter)
 # - #pythonProperty ; Exposes the get/set methods as a class property
+# - #pythonSingleton ; Exposes the get/set singleton Instance
 # -----------------------------------------------------------------------------
 
 # Imports
 import re
-from shlex import join
 import sys
 import os
 
@@ -44,9 +44,14 @@ def pack_data(filename, outputDirectory):
     with open(filename, 'r') as file:
         content = file.read()
         
-    [mappedResults, mappedMethods, mappedProperties] = get_mapped_items(content)
+    mappedResults = get_mapped_items(content)
+    
+    mappedMethods = [result for result in mappedResults if '#pythonMethod' in result['tag']]
+    mappedProperties = [result for result in mappedResults if '#pythonProperty' in result['tag']]
+    singletonAccess = next((result for result in mappedResults if '#pythonSingleton' in result['tag']), None) #TODO: Silent error if multiple singletons are defined
+    
     classNamespace = get_namespace(content)
-
+    
     return {
         'mappedResults' : mappedResults,
         'mappedMethods' : mappedMethods, 
@@ -55,7 +60,8 @@ def pack_data(filename, outputDirectory):
         'classDescription' : get_class_description(content), 
         'outputFile' : outputDirectory + '/' + namespace_to_camel_case(classNamespace) + 'PythonBindings' , 
         'headerInclude' : get_relative_path(filename, outputDirectory),
-        'namespace' : classNamespace
+        'namespace' : classNamespace,
+        'singletonAccess' : singletonAccess
     }
     
 # Returns the direct 
@@ -156,17 +162,18 @@ def get_mapped_items(content):
 
     # Map al matches into a dictionary
     mappedResults = [match_to_dict(match) for match in allMethods]
-    mappedMethods = [result for result in mappedResults if '#pythonMethod' in result['tag']]
-    mappedProperties = [result for result in mappedResults if '#pythonProperty' in result['tag']]
     
-    return [mappedResults, mappedMethods, mappedProperties]
+    return mappedResults
 
 # returns the pybind11 class deifintion that exposes a c++ class to python
 def get_pybind_class_definition(file, data):
     file.write(f"\t\t    pybind11::class_<{data['namespace']}::{data['className']}>(carouselModule, \"{data['className']}\")\n")
 
     # Add default constructor
-    file.write('\t\t        .def(pybind11::init<>())\n')
+    if data['singletonAccess']:
+        file.write(f'\t\t        .def_static(\"Instance\", &{data["namespace"]}::{data["className"]}::{data["singletonAccess"]["method_name"]}, pybind11::return_value_policy::reference)\n')
+    else:
+        file.write('\t\t        .def(pybind11::init<>())\n')
 
     # Add properties 
     for mappedProperty in data['mappedProperties']:
@@ -248,15 +255,15 @@ with open(outputFile, 'w') as file:
     file.write('#include <pybind11/pybind11.h>\n')
     
     # Add all include directives required
-    for data in toEmbeddData:
-        file.write(f'#include \"{data["headerInclude"]}\"\n\n')
-    
+    file.write(''.join(f'#include "{data["headerInclude"]}"\n' for data in toEmbeddData))
+    file.write('\n')
+
     # Namespace carousel :: scripting
     file.write('namespace carousel \n {\n')
     file.write('\tnamespace scripting \n\t{\n')
     
     # Create static method used for exposing the methods
-    file.write('\t\tstatic void expose_models(pybind11::module& carouselModule) {\n\n')
+    file.write('\t\tstatic void expose_models(pybind11::module& carouselModule) {\n')
     
     # Add all properties
     for data in toEmbeddData:

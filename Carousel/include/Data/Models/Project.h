@@ -42,8 +42,7 @@ namespace carousel
 				registerProperty("SoftwareName", [&] {return getSoftwareName(); }, [&](const std::string& newValue) {setSoftwareName(newValue); });
 			}
 
-		public: // Tags: #python
-
+		public:
 			/// <summary>
 			/// Get Id
 			/// </summary>
