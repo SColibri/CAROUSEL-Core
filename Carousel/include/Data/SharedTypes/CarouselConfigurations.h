@@ -259,8 +259,11 @@ namespace carousel
   namespace data
   {
     class DatabaseType;
+    class IpcType;
     class CarouselConfiguration;
     class DatabaseConfiguration;
+    class IpcConfiguration;
+    class LoggingConfiguration;
   }
 }
 
@@ -343,6 +346,66 @@ namespace carousel
       static const value _xsd_DatabaseType_indexes_[1];
     };
 
+    class IpcType: public ::xml_schema::string
+    {
+      public:
+      enum value
+      {
+        PIPE
+      };
+
+      IpcType (value v);
+
+      IpcType (const char* v);
+
+      IpcType (const ::std::string& v);
+
+      IpcType (const ::xml_schema::string& v);
+
+      IpcType (const ::xercesc::DOMElement& e,
+               ::xml_schema::flags f = 0,
+               ::xml_schema::container* c = 0);
+
+      IpcType (const ::xercesc::DOMAttr& a,
+               ::xml_schema::flags f = 0,
+               ::xml_schema::container* c = 0);
+
+      IpcType (const ::std::string& s,
+               const ::xercesc::DOMElement* e,
+               ::xml_schema::flags f = 0,
+               ::xml_schema::container* c = 0);
+
+      IpcType (const IpcType& x,
+               ::xml_schema::flags f = 0,
+               ::xml_schema::container* c = 0);
+
+#ifdef XSD_CXX11
+      IpcType&
+      operator= (const IpcType&) = default;
+#endif
+
+      virtual IpcType*
+      _clone (::xml_schema::flags f = 0,
+              ::xml_schema::container* c = 0) const;
+
+      IpcType&
+      operator= (value v);
+
+      virtual
+      operator value () const
+      {
+        return _xsd_IpcType_convert ();
+      }
+
+      protected:
+      value
+      _xsd_IpcType_convert () const;
+
+      public:
+      static const char* const _xsd_IpcType_literals_[1];
+      static const value _xsd_IpcType_indexes_[1];
+    };
+
     class CarouselConfiguration: public ::xml_schema::type
     {
       public:
@@ -363,11 +426,49 @@ namespace carousel
       void
       DatabaseConfiguration (::std::unique_ptr< DatabaseConfiguration_type > p);
 
+      // IpcConfiguration
+      //
+      typedef ::carousel::data::IpcConfiguration IpcConfiguration_type;
+      typedef ::xsd::cxx::tree::traits< IpcConfiguration_type, char > IpcConfiguration_traits;
+
+      const IpcConfiguration_type&
+      IpcConfiguration () const;
+
+      IpcConfiguration_type&
+      IpcConfiguration ();
+
+      void
+      IpcConfiguration (const IpcConfiguration_type& x);
+
+      void
+      IpcConfiguration (::std::unique_ptr< IpcConfiguration_type > p);
+
+      // LoggingConfiguration
+      //
+      typedef ::carousel::data::LoggingConfiguration LoggingConfiguration_type;
+      typedef ::xsd::cxx::tree::traits< LoggingConfiguration_type, char > LoggingConfiguration_traits;
+
+      const LoggingConfiguration_type&
+      LoggingConfiguration () const;
+
+      LoggingConfiguration_type&
+      LoggingConfiguration ();
+
+      void
+      LoggingConfiguration (const LoggingConfiguration_type& x);
+
+      void
+      LoggingConfiguration (::std::unique_ptr< LoggingConfiguration_type > p);
+
       // Constructors.
       //
-      CarouselConfiguration (const DatabaseConfiguration_type&);
+      CarouselConfiguration (const DatabaseConfiguration_type&,
+                             const IpcConfiguration_type&,
+                             const LoggingConfiguration_type&);
 
-      CarouselConfiguration (::std::unique_ptr< DatabaseConfiguration_type >);
+      CarouselConfiguration (::std::unique_ptr< DatabaseConfiguration_type >,
+                             ::std::unique_ptr< IpcConfiguration_type >,
+                             ::std::unique_ptr< LoggingConfiguration_type >);
 
       CarouselConfiguration (const ::xercesc::DOMElement& e,
                              ::xml_schema::flags f = 0,
@@ -396,6 +497,8 @@ namespace carousel
 
       protected:
       ::xsd::cxx::tree::one< DatabaseConfiguration_type > DatabaseConfiguration_;
+      ::xsd::cxx::tree::one< IpcConfiguration_type > IpcConfiguration_;
+      ::xsd::cxx::tree::one< LoggingConfiguration_type > LoggingConfiguration_;
     };
 
     bool
@@ -425,9 +528,12 @@ namespace carousel
       void
       selectedDatabase (::std::unique_ptr< selectedDatabase_type > p);
 
+      static const selectedDatabase_type&
+      selectedDatabase_default_value ();
+
       // Constructors.
       //
-      DatabaseConfiguration (const selectedDatabase_type&);
+      DatabaseConfiguration ();
 
       DatabaseConfiguration (const ::xercesc::DOMElement& e,
                              ::xml_schema::flags f = 0,
@@ -456,6 +562,7 @@ namespace carousel
 
       protected:
       ::xsd::cxx::tree::one< selectedDatabase_type > selectedDatabase_;
+      static const selectedDatabase_type selectedDatabase_default_value_;
     };
 
     bool
@@ -463,6 +570,153 @@ namespace carousel
 
     bool
     operator!= (const DatabaseConfiguration&, const DatabaseConfiguration&);
+
+
+    class IpcConfiguration: public ::xml_schema::type
+    {
+      public:
+      // commType
+      //
+      typedef ::carousel::data::IpcType commType_type;
+      typedef ::xsd::cxx::tree::traits< commType_type, char > commType_traits;
+
+      const commType_type&
+      commType () const;
+
+      commType_type&
+      commType ();
+
+      void
+      commType (const commType_type& x);
+
+      void
+      commType (::std::unique_ptr< commType_type > p);
+
+      static const commType_type&
+      commType_default_value ();
+
+      // timeout
+      //
+      typedef ::xml_schema::int_ timeout_type;
+      typedef ::xsd::cxx::tree::optional< timeout_type > timeout_optional;
+      typedef ::xsd::cxx::tree::traits< timeout_type, char > timeout_traits;
+
+      const timeout_optional&
+      timeout () const;
+
+      timeout_optional&
+      timeout ();
+
+      void
+      timeout (const timeout_type& x);
+
+      void
+      timeout (const timeout_optional& x);
+
+      // Constructors.
+      //
+      IpcConfiguration ();
+
+      IpcConfiguration (const ::xercesc::DOMElement& e,
+                        ::xml_schema::flags f = 0,
+                        ::xml_schema::container* c = 0);
+
+      IpcConfiguration (const IpcConfiguration& x,
+                        ::xml_schema::flags f = 0,
+                        ::xml_schema::container* c = 0);
+
+      virtual IpcConfiguration*
+      _clone (::xml_schema::flags f = 0,
+              ::xml_schema::container* c = 0) const;
+
+      IpcConfiguration&
+      operator= (const IpcConfiguration& x);
+
+      virtual 
+      ~IpcConfiguration ();
+
+      // Implementation.
+      //
+      protected:
+      void
+      parse (::xsd::cxx::xml::dom::parser< char >&,
+             ::xml_schema::flags);
+
+      protected:
+      ::xsd::cxx::tree::one< commType_type > commType_;
+      static const commType_type commType_default_value_;
+      timeout_optional timeout_;
+    };
+
+    bool
+    operator== (const IpcConfiguration&, const IpcConfiguration&);
+
+    bool
+    operator!= (const IpcConfiguration&, const IpcConfiguration&);
+
+
+    class LoggingConfiguration: public ::xml_schema::type
+    {
+      public:
+      // loggingDirectory
+      //
+      typedef ::xml_schema::string loggingDirectory_type;
+      typedef ::xsd::cxx::tree::traits< loggingDirectory_type, char > loggingDirectory_traits;
+
+      const loggingDirectory_type&
+      loggingDirectory () const;
+
+      loggingDirectory_type&
+      loggingDirectory ();
+
+      void
+      loggingDirectory (const loggingDirectory_type& x);
+
+      void
+      loggingDirectory (::std::unique_ptr< loggingDirectory_type > p);
+
+      static const loggingDirectory_type&
+      loggingDirectory_default_value ();
+
+      // Constructors.
+      //
+      LoggingConfiguration ();
+
+      LoggingConfiguration (const ::xercesc::DOMElement& e,
+                            ::xml_schema::flags f = 0,
+                            ::xml_schema::container* c = 0);
+
+      LoggingConfiguration (const LoggingConfiguration& x,
+                            ::xml_schema::flags f = 0,
+                            ::xml_schema::container* c = 0);
+
+      virtual LoggingConfiguration*
+      _clone (::xml_schema::flags f = 0,
+              ::xml_schema::container* c = 0) const;
+
+      LoggingConfiguration&
+      operator= (const LoggingConfiguration& x);
+
+      virtual 
+      ~LoggingConfiguration ();
+
+      // Implementation.
+      //
+      protected:
+      void
+      parse (::xsd::cxx::xml::dom::parser< char >&,
+             ::xml_schema::flags);
+
+      protected:
+      ::xsd::cxx::tree::one< loggingDirectory_type > loggingDirectory_;
+      static const loggingDirectory_type loggingDirectory_default_value_;
+    };
+
+    bool
+    operator== (const LoggingConfiguration&, const LoggingConfiguration&);
+
+    bool
+    operator!= (const LoggingConfiguration&, const LoggingConfiguration&);
   }
 }
 
@@ -479,10 +733,22 @@ namespace carousel
     operator<< (::std::ostream&, const DatabaseType&);
 
     ::std::ostream&
+    operator<< (::std::ostream&, IpcType::value);
+
+    ::std::ostream&
+    operator<< (::std::ostream&, const IpcType&);
+
+    ::std::ostream&
     operator<< (::std::ostream&, const CarouselConfiguration&);
 
     ::std::ostream&
     operator<< (::std::ostream&, const DatabaseConfiguration&);
+
+    ::std::ostream&
+    operator<< (::std::ostream&, const IpcConfiguration&);
+
+    ::std::ostream&
+    operator<< (::std::ostream&, const LoggingConfiguration&);
   }
 }
 
@@ -588,99 +854,6 @@ namespace carousel
     CarouselConfiguration_ (::xml_schema::dom::unique_ptr< ::xercesc::DOMDocument > d,
                             ::xml_schema::flags f = 0,
                             const ::xml_schema::properties& p = ::xml_schema::properties ());
-
-    // Parse a URI or a local file.
-    //
-
-    ::std::unique_ptr< ::carousel::data::DatabaseConfiguration >
-    DatabaseConfiguration_ (const ::std::string& uri,
-                            ::xml_schema::flags f = 0,
-                            const ::xml_schema::properties& p = ::xml_schema::properties ());
-
-    ::std::unique_ptr< ::carousel::data::DatabaseConfiguration >
-    DatabaseConfiguration_ (const ::std::string& uri,
-                            ::xml_schema::error_handler& eh,
-                            ::xml_schema::flags f = 0,
-                            const ::xml_schema::properties& p = ::xml_schema::properties ());
-
-    ::std::unique_ptr< ::carousel::data::DatabaseConfiguration >
-    DatabaseConfiguration_ (const ::std::string& uri,
-                            ::xercesc::DOMErrorHandler& eh,
-                            ::xml_schema::flags f = 0,
-                            const ::xml_schema::properties& p = ::xml_schema::properties ());
-
-    // Parse std::istream.
-    //
-
-    ::std::unique_ptr< ::carousel::data::DatabaseConfiguration >
-    DatabaseConfiguration_ (::std::istream& is,
-                            ::xml_schema::flags f = 0,
-                            const ::xml_schema::properties& p = ::xml_schema::properties ());
-
-    ::std::unique_ptr< ::carousel::data::DatabaseConfiguration >
-    DatabaseConfiguration_ (::std::istream& is,
-                            ::xml_schema::error_handler& eh,
-                            ::xml_schema::flags f = 0,
-                            const ::xml_schema::properties& p = ::xml_schema::properties ());
-
-    ::std::unique_ptr< ::carousel::data::DatabaseConfiguration >
-    DatabaseConfiguration_ (::std::istream& is,
-                            ::xercesc::DOMErrorHandler& eh,
-                            ::xml_schema::flags f = 0,
-                            const ::xml_schema::properties& p = ::xml_schema::properties ());
-
-    ::std::unique_ptr< ::carousel::data::DatabaseConfiguration >
-    DatabaseConfiguration_ (::std::istream& is,
-                            const ::std::string& id,
-                            ::xml_schema::flags f = 0,
-                            const ::xml_schema::properties& p = ::xml_schema::properties ());
-
-    ::std::unique_ptr< ::carousel::data::DatabaseConfiguration >
-    DatabaseConfiguration_ (::std::istream& is,
-                            const ::std::string& id,
-                            ::xml_schema::error_handler& eh,
-                            ::xml_schema::flags f = 0,
-                            const ::xml_schema::properties& p = ::xml_schema::properties ());
-
-    ::std::unique_ptr< ::carousel::data::DatabaseConfiguration >
-    DatabaseConfiguration_ (::std::istream& is,
-                            const ::std::string& id,
-                            ::xercesc::DOMErrorHandler& eh,
-                            ::xml_schema::flags f = 0,
-                            const ::xml_schema::properties& p = ::xml_schema::properties ());
-
-    // Parse xercesc::InputSource.
-    //
-
-    ::std::unique_ptr< ::carousel::data::DatabaseConfiguration >
-    DatabaseConfiguration_ (::xercesc::InputSource& is,
-                            ::xml_schema::flags f = 0,
-                            const ::xml_schema::properties& p = ::xml_schema::properties ());
-
-    ::std::unique_ptr< ::carousel::data::DatabaseConfiguration >
-    DatabaseConfiguration_ (::xercesc::InputSource& is,
-                            ::xml_schema::error_handler& eh,
-                            ::xml_schema::flags f = 0,
-                            const ::xml_schema::properties& p = ::xml_schema::properties ());
-
-    ::std::unique_ptr< ::carousel::data::DatabaseConfiguration >
-    DatabaseConfiguration_ (::xercesc::InputSource& is,
-                            ::xercesc::DOMErrorHandler& eh,
-                            ::xml_schema::flags f = 0,
-                            const ::xml_schema::properties& p = ::xml_schema::properties ());
-
-    // Parse xercesc::DOMDocument.
-    //
-
-    ::std::unique_ptr< ::carousel::data::DatabaseConfiguration >
-    DatabaseConfiguration_ (const ::xercesc::DOMDocument& d,
-                            ::xml_schema::flags f = 0,
-                            const ::xml_schema::properties& p = ::xml_schema::properties ());
-
-    ::std::unique_ptr< ::carousel::data::DatabaseConfiguration >
-    DatabaseConfiguration_ (::xml_schema::dom::unique_ptr< ::xercesc::DOMDocument > d,
-                            ::xml_schema::flags f = 0,
-                            const ::xml_schema::properties& p = ::xml_schema::properties ());
   }
 }
 
@@ -764,74 +937,6 @@ namespace carousel
                             const ::xml_schema::namespace_infomap& m = ::xml_schema::namespace_infomap (),
                             ::xml_schema::flags f = 0);
 
-    // Serialize to std::ostream.
-    //
-
-    void
-    DatabaseConfiguration_ (::std::ostream& os,
-                            const ::carousel::data::DatabaseConfiguration& x, 
-                            const ::xml_schema::namespace_infomap& m = ::xml_schema::namespace_infomap (),
-                            const ::std::string& e = "UTF-8",
-                            ::xml_schema::flags f = 0);
-
-    void
-    DatabaseConfiguration_ (::std::ostream& os,
-                            const ::carousel::data::DatabaseConfiguration& x, 
-                            ::xml_schema::error_handler& eh,
-                            const ::xml_schema::namespace_infomap& m = ::xml_schema::namespace_infomap (),
-                            const ::std::string& e = "UTF-8",
-                            ::xml_schema::flags f = 0);
-
-    void
-    DatabaseConfiguration_ (::std::ostream& os,
-                            const ::carousel::data::DatabaseConfiguration& x, 
-                            ::xercesc::DOMErrorHandler& eh,
-                            const ::xml_schema::namespace_infomap& m = ::xml_schema::namespace_infomap (),
-                            const ::std::string& e = "UTF-8",
-                            ::xml_schema::flags f = 0);
-
-    // Serialize to xercesc::XMLFormatTarget.
-    //
-
-    void
-    DatabaseConfiguration_ (::xercesc::XMLFormatTarget& ft,
-                            const ::carousel::data::DatabaseConfiguration& x, 
-                            const ::xml_schema::namespace_infomap& m = ::xml_schema::namespace_infomap (),
-                            const ::std::string& e = "UTF-8",
-                            ::xml_schema::flags f = 0);
-
-    void
-    DatabaseConfiguration_ (::xercesc::XMLFormatTarget& ft,
-                            const ::carousel::data::DatabaseConfiguration& x, 
-                            ::xml_schema::error_handler& eh,
-                            const ::xml_schema::namespace_infomap& m = ::xml_schema::namespace_infomap (),
-                            const ::std::string& e = "UTF-8",
-                            ::xml_schema::flags f = 0);
-
-    void
-    DatabaseConfiguration_ (::xercesc::XMLFormatTarget& ft,
-                            const ::carousel::data::DatabaseConfiguration& x, 
-                            ::xercesc::DOMErrorHandler& eh,
-                            const ::xml_schema::namespace_infomap& m = ::xml_schema::namespace_infomap (),
-                            const ::std::string& e = "UTF-8",
-                            ::xml_schema::flags f = 0);
-
-    // Serialize to an existing xercesc::DOMDocument.
-    //
-
-    void
-    DatabaseConfiguration_ (::xercesc::DOMDocument& d,
-                            const ::carousel::data::DatabaseConfiguration& x,
-                            ::xml_schema::flags f = 0);
-
-    // Serialize to a new xercesc::DOMDocument.
-    //
-
-    ::xml_schema::dom::unique_ptr< ::xercesc::DOMDocument >
-    DatabaseConfiguration_ (const ::carousel::data::DatabaseConfiguration& x, 
-                            const ::xml_schema::namespace_infomap& m = ::xml_schema::namespace_infomap (),
-                            ::xml_schema::flags f = 0);
-
     void
     operator<< (::xercesc::DOMElement&, const DatabaseType&);
 
@@ -843,10 +948,26 @@ namespace carousel
                 const DatabaseType&);
 
     void
+    operator<< (::xercesc::DOMElement&, const IpcType&);
+
+    void
+    operator<< (::xercesc::DOMAttr&, const IpcType&);
+
+    void
+    operator<< (::xml_schema::list_stream&,
+                const IpcType&);
+
+    void
     operator<< (::xercesc::DOMElement&, const CarouselConfiguration&);
 
     void
     operator<< (::xercesc::DOMElement&, const DatabaseConfiguration&);
+
+    void
+    operator<< (::xercesc::DOMElement&, const IpcConfiguration&);
+
+    void
+    operator<< (::xercesc::DOMElement&, const LoggingConfiguration&);
   }
 }
 

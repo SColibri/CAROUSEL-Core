@@ -158,8 +158,8 @@ namespace carousel
 					}
 
 					// cleanup and update values to data model
-					delete parser;
 					updateValuesToSource();
+					delete parser;
 				}
 				catch (const xercesc::DOMException& e) {
 					char* message = xercesc::XMLString::transcode(e.getMessage());
@@ -301,13 +301,17 @@ namespace carousel
 			/// <summary>
 			/// Serializes object to XML and returns the structure in a string
 			/// </summary>
-			std::string serialize()
+			virtual std::string serialize()
 			{
 				// update values before serialize
 				updateValuesFromSource();
 
 				// setup dom serializer and targets
 				xercesc::DOMLSSerializer* serializer = ((xercesc::DOMImplementationLS*)_implementation)->createLSSerializer();
+				if (serializer->getDomConfig()->canSetParameter(xercesc::XMLUni::fgDOMWRTFormatPrettyPrint, true)) {
+					serializer->getDomConfig()->setParameter(xercesc::XMLUni::fgDOMWRTFormatPrettyPrint, true);
+				}
+
 				xercesc::DOMLSOutput* output = ((xercesc::DOMImplementationLS*)_implementation)->createLSOutput();
 				xercesc::MemBufFormatTarget* target = new xercesc::MemBufFormatTarget();
 				output->setByteStream(target);

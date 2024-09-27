@@ -71,4 +71,3 @@ target_link_libraries(${PROJECT_NAME} Catch2::Catch2WithMain SQLite::SQLite3 Xer
 add_subdirectory("Tests")
 
 
-

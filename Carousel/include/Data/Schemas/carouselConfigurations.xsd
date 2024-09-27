@@ -3,35 +3,51 @@
 <!--
   This schema contains all configuration models that are used by the framework
 -->
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" 
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
            targetNamespace="http://carousel.com/carousel/data"
            xmlns="http://carousel.com/carousel/data"
            elementFormDefault="qualified">
-
 
   <!-- Carousel configurations -->
   <xs:element name="CarouselConfiguration">
     <xs:complexType>
       <xs:sequence>
-        <!-- Database -->
-        <xs:element ref="DatabaseConfiguration"/>
+        <!-- Database configurations -->
+        <xs:element name="DatabaseConfiguration">
+          <xs:complexType>
+            <xs:attribute name="selectedDatabase" type="DatabaseType" default="SQLite3"/>
+          </xs:complexType>
+        </xs:element>
+        
+        <!-- IPC Communication configurations -->
+        <xs:element name="IpcConfiguration">
+          <xs:complexType>
+            <xs:attribute name="commType" type="IpcType" default="PIPE"/>
+            <xs:attribute name="timeout" type="xs:int"/>
+          </xs:complexType>
+        </xs:element>
+        
+        <!-- Logging configurations -->
+        <xs:element name="LoggingConfiguration">
+          <xs:complexType>
+            <xs:attribute name="loggingDirectory" type="xs:string" default=""/>
+          </xs:complexType>
+        </xs:element>
       </xs:sequence>
     </xs:complexType>
   </xs:element>
 
-  <!-- Database configurations -->
-  <xs:element name="DatabaseConfiguration">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element name="selectedDatabase" type="DatabaseType"/>
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  
   <!-- Available database frameworks -->
   <xs:simpleType name="DatabaseType">
     <xs:restriction base="xs:string">
       <xs:enumeration value="SQLite3"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <!-- Available IPC methods -->
+  <xs:simpleType name="IpcType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="PIPE"/>
     </xs:restriction>
   </xs:simpleType>
 </xs:schema>

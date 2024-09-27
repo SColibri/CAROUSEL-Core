@@ -25,8 +25,8 @@ set(SCRIPTING_DIR include/Scripting)
 execute_process(
 	COMMAND Python3 ${CMAKE_CURRENT_SOURCE_DIR}/pythonBindings.py 
 					${CMAKE_CURRENT_SOURCE_DIR}/${SCRIPTING_DIR}
-					CarouselData
-					${CMAKE_CURRENT_SOURCE_DIR}/include/Data/Models/Project.h
+					carouseldata
+					${CMAKE_CURRENT_SOURCE_DIR}/include/Data/Models/*.h
 					${CMAKE_CURRENT_SOURCE_DIR}/include/Core/BaseTypes/CarouselSandbox.h
 					${CMAKE_CURRENT_SOURCE_DIR}/include/Logging/CarouselLogger.h
 	RESULT_VARIABLE bindingResult

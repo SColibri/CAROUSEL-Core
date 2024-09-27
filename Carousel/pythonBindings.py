@@ -1,5 +1,5 @@
 # ----------------------
-# Data models
+# Python bindings and stub file
 # -----------------------------------------------------------------------------
 # Developer: Sebastian Carrion
 # Year: 2024
@@ -171,7 +171,7 @@ def get_pybind_class_definition(file, data):
 
     # Add default constructor
     if data['singletonAccess']:
-        file.write(f'\t\t        .def_static(\"Instance\", &{data["namespace"]}::{data["className"]}::{data["singletonAccess"]["method_name"]}, pybind11::return_value_policy::reference)\n')
+        file.write(f'\t\t        .def_static(\"{data["singletonAccess"]["method_name"]}\", &{data["namespace"]}::{data["className"]}::{data["singletonAccess"]["method_name"]}, pybind11::return_value_policy::reference)\n')
     else:
         file.write('\t\t        .def(pybind11::init<>())\n')
 
@@ -184,7 +184,7 @@ def get_pybind_class_definition(file, data):
         if not parameterName:
             raise Exception(f'Property tag #pythonProperty should be set on a set method with one parameter: Method - {methodName} || {data["namespace"]}::{data["className"]}')
 
-        lineToAdd = f"\t\t        .def_property(\"{methodName.replace('set','')}\", &{data['namespace']}::{data['className']}::{methodName}, &{data['namespace']}::{data['className']}::{methodName.replace('set', 'get')})\n"
+        lineToAdd = f"\t\t        .def_property(\"{methodName.replace('set','')}\", &{data['namespace']}::{data['className']}::{methodName.replace('set', 'get')}, &{data['namespace']}::{data['className']}::{methodName})\n"
         file.write(lineToAdd)
 
     # Add method matches (TODO: do we need more than one parameter?)
@@ -211,7 +211,13 @@ def get_python_class_definition(file, data):
     # Add class summary to stub file
     if data['classDescription']:
         file.write(f'\t"""\n\t{data["classDescription"].replace("///","")}\n\t"""\n\n')
-        
+    
+    # If class is singleton add instance
+    if data['singletonAccess']:
+        file.write('\t@staticmethod\n')
+        file.write(f'\tdef {data["singletonAccess"]["method_name"]}() ->  {data["className"]} : ...\n')
+        file.write(f'\t"""\n\t{data["singletonAccess"]["summary"].replace("///","")}\n\t"""\n\n')
+
     # Add properties
     for mappedProperty in data['mappedProperties']:
         methodDescription = mappedProperty['summary']
@@ -273,7 +279,7 @@ with open(outputFile, 'w') as file:
     file.write('\t\t}\n\t}\n}')
     
 # Create stub file
-with open(outputFile.replace(".h",".pyi"), 'w') as file:
+with open(outputFile.replace("PythonBindings.h",".pyi"), 'w') as file:
     # Add Imports
     for data in toEmbeddData:
         importList = get_list_of_imports(data['mappedResults'])

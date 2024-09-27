@@ -89,6 +89,51 @@ namespace carousel
     }
 
 
+    // IpcType
+    //
+
+    IpcType::
+    IpcType (value v)
+    : ::xml_schema::string (_xsd_IpcType_literals_[v])
+    {
+    }
+
+    IpcType::
+    IpcType (const char* v)
+    : ::xml_schema::string (v)
+    {
+    }
+
+    IpcType::
+    IpcType (const ::std::string& v)
+    : ::xml_schema::string (v)
+    {
+    }
+
+    IpcType::
+    IpcType (const ::xml_schema::string& v)
+    : ::xml_schema::string (v)
+    {
+    }
+
+    IpcType::
+    IpcType (const IpcType& v,
+             ::xml_schema::flags f,
+             ::xml_schema::container* c)
+    : ::xml_schema::string (v, f, c)
+    {
+    }
+
+    IpcType& IpcType::
+    operator= (value v)
+    {
+      static_cast< ::xml_schema::string& > (*this) = 
+      ::xml_schema::string (_xsd_IpcType_literals_[v]);
+
+      return *this;
+    }
+
+
     // CarouselConfiguration
     //
 
@@ -114,6 +159,54 @@ namespace carousel
     DatabaseConfiguration (::std::unique_ptr< DatabaseConfiguration_type > x)
     {
       this->DatabaseConfiguration_.set (std::move (x));
+    }
+
+    const CarouselConfiguration::IpcConfiguration_type& CarouselConfiguration::
+    IpcConfiguration () const
+    {
+      return this->IpcConfiguration_.get ();
+    }
+
+    CarouselConfiguration::IpcConfiguration_type& CarouselConfiguration::
+    IpcConfiguration ()
+    {
+      return this->IpcConfiguration_.get ();
+    }
+
+    void CarouselConfiguration::
+    IpcConfiguration (const IpcConfiguration_type& x)
+    {
+      this->IpcConfiguration_.set (x);
+    }
+
+    void CarouselConfiguration::
+    IpcConfiguration (::std::unique_ptr< IpcConfiguration_type > x)
+    {
+      this->IpcConfiguration_.set (std::move (x));
+    }
+
+    const CarouselConfiguration::LoggingConfiguration_type& CarouselConfiguration::
+    LoggingConfiguration () const
+    {
+      return this->LoggingConfiguration_.get ();
+    }
+
+    CarouselConfiguration::LoggingConfiguration_type& CarouselConfiguration::
+    LoggingConfiguration ()
+    {
+      return this->LoggingConfiguration_.get ();
+    }
+
+    void CarouselConfiguration::
+    LoggingConfiguration (const LoggingConfiguration_type& x)
+    {
+      this->LoggingConfiguration_.set (x);
+    }
+
+    void CarouselConfiguration::
+    LoggingConfiguration (::std::unique_ptr< LoggingConfiguration_type > x)
+    {
+      this->LoggingConfiguration_.set (std::move (x));
     }
 
 
@@ -142,6 +235,104 @@ namespace carousel
     selectedDatabase (::std::unique_ptr< selectedDatabase_type > x)
     {
       this->selectedDatabase_.set (std::move (x));
+    }
+
+    const DatabaseConfiguration::selectedDatabase_type& DatabaseConfiguration::
+    selectedDatabase_default_value ()
+    {
+      return selectedDatabase_default_value_;
+    }
+
+
+    // IpcConfiguration
+    //
+
+    const IpcConfiguration::commType_type& IpcConfiguration::
+    commType () const
+    {
+      return this->commType_.get ();
+    }
+
+    IpcConfiguration::commType_type& IpcConfiguration::
+    commType ()
+    {
+      return this->commType_.get ();
+    }
+
+    void IpcConfiguration::
+    commType (const commType_type& x)
+    {
+      this->commType_.set (x);
+    }
+
+    void IpcConfiguration::
+    commType (::std::unique_ptr< commType_type > x)
+    {
+      this->commType_.set (std::move (x));
+    }
+
+    const IpcConfiguration::commType_type& IpcConfiguration::
+    commType_default_value ()
+    {
+      return commType_default_value_;
+    }
+
+    const IpcConfiguration::timeout_optional& IpcConfiguration::
+    timeout () const
+    {
+      return this->timeout_;
+    }
+
+    IpcConfiguration::timeout_optional& IpcConfiguration::
+    timeout ()
+    {
+      return this->timeout_;
+    }
+
+    void IpcConfiguration::
+    timeout (const timeout_type& x)
+    {
+      this->timeout_.set (x);
+    }
+
+    void IpcConfiguration::
+    timeout (const timeout_optional& x)
+    {
+      this->timeout_ = x;
+    }
+
+
+    // LoggingConfiguration
+    //
+
+    const LoggingConfiguration::loggingDirectory_type& LoggingConfiguration::
+    loggingDirectory () const
+    {
+      return this->loggingDirectory_.get ();
+    }
+
+    LoggingConfiguration::loggingDirectory_type& LoggingConfiguration::
+    loggingDirectory ()
+    {
+      return this->loggingDirectory_.get ();
+    }
+
+    void LoggingConfiguration::
+    loggingDirectory (const loggingDirectory_type& x)
+    {
+      this->loggingDirectory_.set (x);
+    }
+
+    void LoggingConfiguration::
+    loggingDirectory (::std::unique_ptr< loggingDirectory_type > x)
+    {
+      this->loggingDirectory_.set (std::move (x));
+    }
+
+    const LoggingConfiguration::loggingDirectory_type& LoggingConfiguration::
+    loggingDirectory_default_value ()
+    {
+      return loggingDirectory_default_value_;
     }
   }
 }
@@ -220,20 +411,96 @@ namespace carousel
       ::carousel::data::DatabaseType::SQLite3
     };
 
+    // IpcType
+    //
+
+    IpcType::
+    IpcType (const ::xercesc::DOMElement& e,
+             ::xml_schema::flags f,
+             ::xml_schema::container* c)
+    : ::xml_schema::string (e, f, c)
+    {
+      _xsd_IpcType_convert ();
+    }
+
+    IpcType::
+    IpcType (const ::xercesc::DOMAttr& a,
+             ::xml_schema::flags f,
+             ::xml_schema::container* c)
+    : ::xml_schema::string (a, f, c)
+    {
+      _xsd_IpcType_convert ();
+    }
+
+    IpcType::
+    IpcType (const ::std::string& s,
+             const ::xercesc::DOMElement* e,
+             ::xml_schema::flags f,
+             ::xml_schema::container* c)
+    : ::xml_schema::string (s, e, f, c)
+    {
+      _xsd_IpcType_convert ();
+    }
+
+    IpcType* IpcType::
+    _clone (::xml_schema::flags f,
+            ::xml_schema::container* c) const
+    {
+      return new class IpcType (*this, f, c);
+    }
+
+    IpcType::value IpcType::
+    _xsd_IpcType_convert () const
+    {
+      ::xsd::cxx::tree::enum_comparator< char > c (_xsd_IpcType_literals_);
+      const value* i (::std::lower_bound (
+                        _xsd_IpcType_indexes_,
+                        _xsd_IpcType_indexes_ + 1,
+                        *this,
+                        c));
+
+      if (i == _xsd_IpcType_indexes_ + 1 || _xsd_IpcType_literals_[*i] != *this)
+      {
+        throw ::xsd::cxx::tree::unexpected_enumerator < char > (*this);
+      }
+
+      return *i;
+    }
+
+    const char* const IpcType::
+    _xsd_IpcType_literals_[1] =
+    {
+      "PIPE"
+    };
+
+    const IpcType::value IpcType::
+    _xsd_IpcType_indexes_[1] =
+    {
+      ::carousel::data::IpcType::PIPE
+    };
+
     // CarouselConfiguration
     //
 
     CarouselConfiguration::
-    CarouselConfiguration (const DatabaseConfiguration_type& DatabaseConfiguration)
+    CarouselConfiguration (const DatabaseConfiguration_type& DatabaseConfiguration,
+                           const IpcConfiguration_type& IpcConfiguration,
+                           const LoggingConfiguration_type& LoggingConfiguration)
     : ::xml_schema::type (),
-      DatabaseConfiguration_ (DatabaseConfiguration, this)
+      DatabaseConfiguration_ (DatabaseConfiguration, this),
+      IpcConfiguration_ (IpcConfiguration, this),
+      LoggingConfiguration_ (LoggingConfiguration, this)
     {
     }
 
     CarouselConfiguration::
-    CarouselConfiguration (::std::unique_ptr< DatabaseConfiguration_type > DatabaseConfiguration)
+    CarouselConfiguration (::std::unique_ptr< DatabaseConfiguration_type > DatabaseConfiguration,
+                           ::std::unique_ptr< IpcConfiguration_type > IpcConfiguration,
+                           ::std::unique_ptr< LoggingConfiguration_type > LoggingConfiguration)
     : ::xml_schema::type (),
-      DatabaseConfiguration_ (std::move (DatabaseConfiguration), this)
+      DatabaseConfiguration_ (std::move (DatabaseConfiguration), this),
+      IpcConfiguration_ (std::move (IpcConfiguration), this),
+      LoggingConfiguration_ (std::move (LoggingConfiguration), this)
     {
     }
 
@@ -242,7 +509,9 @@ namespace carousel
                            ::xml_schema::flags f,
                            ::xml_schema::container* c)
     : ::xml_schema::type (x, f, c),
-      DatabaseConfiguration_ (x.DatabaseConfiguration_, f, this)
+      DatabaseConfiguration_ (x.DatabaseConfiguration_, f, this),
+      IpcConfiguration_ (x.IpcConfiguration_, f, this),
+      LoggingConfiguration_ (x.LoggingConfiguration_, f, this)
     {
     }
 
@@ -251,7 +520,9 @@ namespace carousel
                            ::xml_schema::flags f,
                            ::xml_schema::container* c)
     : ::xml_schema::type (e, f | ::xml_schema::flags::base, c),
-      DatabaseConfiguration_ (this)
+      DatabaseConfiguration_ (this),
+      IpcConfiguration_ (this),
+      LoggingConfiguration_ (this)
     {
       if ((f & ::xml_schema::flags::base) == 0)
       {
@@ -284,6 +555,34 @@ namespace carousel
           }
         }
 
+        // IpcConfiguration
+        //
+        if (n.name () == "IpcConfiguration" && n.namespace_ () == "http://carousel.com/carousel/data")
+        {
+          ::std::unique_ptr< IpcConfiguration_type > r (
+            IpcConfiguration_traits::create (i, f, this));
+
+          if (!IpcConfiguration_.present ())
+          {
+            this->IpcConfiguration_.set (::std::move (r));
+            continue;
+          }
+        }
+
+        // LoggingConfiguration
+        //
+        if (n.name () == "LoggingConfiguration" && n.namespace_ () == "http://carousel.com/carousel/data")
+        {
+          ::std::unique_ptr< LoggingConfiguration_type > r (
+            LoggingConfiguration_traits::create (i, f, this));
+
+          if (!LoggingConfiguration_.present ())
+          {
+            this->LoggingConfiguration_.set (::std::move (r));
+            continue;
+          }
+        }
+
         break;
       }
 
@@ -291,6 +590,20 @@ namespace carousel
       {
         throw ::xsd::cxx::tree::expected_element< char > (
           "DatabaseConfiguration",
+          "http://carousel.com/carousel/data");
+      }
+
+      if (!IpcConfiguration_.present ())
+      {
+        throw ::xsd::cxx::tree::expected_element< char > (
+          "IpcConfiguration",
+          "http://carousel.com/carousel/data");
+      }
+
+      if (!LoggingConfiguration_.present ())
+      {
+        throw ::xsd::cxx::tree::expected_element< char > (
+          "LoggingConfiguration",
           "http://carousel.com/carousel/data");
       }
     }
@@ -309,6 +622,8 @@ namespace carousel
       {
         static_cast< ::xml_schema::type& > (*this) = x;
         this->DatabaseConfiguration_ = x.DatabaseConfiguration_;
+        this->IpcConfiguration_ = x.IpcConfiguration_;
+        this->LoggingConfiguration_ = x.LoggingConfiguration_;
       }
 
       return *this;
@@ -325,6 +640,12 @@ namespace carousel
       if (!(x.DatabaseConfiguration () == y.DatabaseConfiguration ()))
         return false;
 
+      if (!(x.IpcConfiguration () == y.IpcConfiguration ()))
+        return false;
+
+      if (!(x.LoggingConfiguration () == y.LoggingConfiguration ()))
+        return false;
+
       return true;
     }
 
@@ -337,10 +658,13 @@ namespace carousel
     // DatabaseConfiguration
     //
 
+    const DatabaseConfiguration::selectedDatabase_type DatabaseConfiguration::selectedDatabase_default_value_ (
+      "SQLite3");
+
     DatabaseConfiguration::
-    DatabaseConfiguration (const selectedDatabase_type& selectedDatabase)
+    DatabaseConfiguration ()
     : ::xml_schema::type (),
-      selectedDatabase_ (selectedDatabase, this)
+      selectedDatabase_ (selectedDatabase_default_value (), this)
     {
     }
 
@@ -362,7 +686,7 @@ namespace carousel
     {
       if ((f & ::xml_schema::flags::base) == 0)
       {
-        ::xsd::cxx::xml::dom::parser< char > p (e, true, false, false);
+        ::xsd::cxx::xml::dom::parser< char > p (e, false, false, true);
         this->parse (p, f);
       }
     }
@@ -371,34 +695,22 @@ namespace carousel
     parse (::xsd::cxx::xml::dom::parser< char >& p,
            ::xml_schema::flags f)
     {
-      for (; p.more_content (); p.next_content (false))
+      while (p.more_attributes ())
       {
-        const ::xercesc::DOMElement& i (p.cur_element ());
+        const ::xercesc::DOMAttr& i (p.next_attribute ());
         const ::xsd::cxx::xml::qualified_name< char > n (
           ::xsd::cxx::xml::dom::name< char > (i));
 
-        // selectedDatabase
-        //
-        if (n.name () == "selectedDatabase" && n.namespace_ () == "http://carousel.com/carousel/data")
+        if (n.name () == "selectedDatabase" && n.namespace_ ().empty ())
         {
-          ::std::unique_ptr< selectedDatabase_type > r (
-            selectedDatabase_traits::create (i, f, this));
-
-          if (!selectedDatabase_.present ())
-          {
-            this->selectedDatabase_.set (::std::move (r));
-            continue;
-          }
+          this->selectedDatabase_.set (selectedDatabase_traits::create (i, f, this));
+          continue;
         }
-
-        break;
       }
 
       if (!selectedDatabase_.present ())
       {
-        throw ::xsd::cxx::tree::expected_element< char > (
-          "selectedDatabase",
-          "http://carousel.com/carousel/data");
+        this->selectedDatabase_.set (selectedDatabase_default_value ());
       }
     }
 
@@ -440,6 +752,215 @@ namespace carousel
     {
       return !(x == y);
     }
+
+    // IpcConfiguration
+    //
+
+    const IpcConfiguration::commType_type IpcConfiguration::commType_default_value_ (
+      "PIPE");
+
+    IpcConfiguration::
+    IpcConfiguration ()
+    : ::xml_schema::type (),
+      commType_ (commType_default_value (), this),
+      timeout_ (this)
+    {
+    }
+
+    IpcConfiguration::
+    IpcConfiguration (const IpcConfiguration& x,
+                      ::xml_schema::flags f,
+                      ::xml_schema::container* c)
+    : ::xml_schema::type (x, f, c),
+      commType_ (x.commType_, f, this),
+      timeout_ (x.timeout_, f, this)
+    {
+    }
+
+    IpcConfiguration::
+    IpcConfiguration (const ::xercesc::DOMElement& e,
+                      ::xml_schema::flags f,
+                      ::xml_schema::container* c)
+    : ::xml_schema::type (e, f | ::xml_schema::flags::base, c),
+      commType_ (this),
+      timeout_ (this)
+    {
+      if ((f & ::xml_schema::flags::base) == 0)
+      {
+        ::xsd::cxx::xml::dom::parser< char > p (e, false, false, true);
+        this->parse (p, f);
+      }
+    }
+
+    void IpcConfiguration::
+    parse (::xsd::cxx::xml::dom::parser< char >& p,
+           ::xml_schema::flags f)
+    {
+      while (p.more_attributes ())
+      {
+        const ::xercesc::DOMAttr& i (p.next_attribute ());
+        const ::xsd::cxx::xml::qualified_name< char > n (
+          ::xsd::cxx::xml::dom::name< char > (i));
+
+        if (n.name () == "commType" && n.namespace_ ().empty ())
+        {
+          this->commType_.set (commType_traits::create (i, f, this));
+          continue;
+        }
+
+        if (n.name () == "timeout" && n.namespace_ ().empty ())
+        {
+          this->timeout_.set (timeout_traits::create (i, f, this));
+          continue;
+        }
+      }
+
+      if (!commType_.present ())
+      {
+        this->commType_.set (commType_default_value ());
+      }
+    }
+
+    IpcConfiguration* IpcConfiguration::
+    _clone (::xml_schema::flags f,
+            ::xml_schema::container* c) const
+    {
+      return new class IpcConfiguration (*this, f, c);
+    }
+
+    IpcConfiguration& IpcConfiguration::
+    operator= (const IpcConfiguration& x)
+    {
+      if (this != &x)
+      {
+        static_cast< ::xml_schema::type& > (*this) = x;
+        this->commType_ = x.commType_;
+        this->timeout_ = x.timeout_;
+      }
+
+      return *this;
+    }
+
+    IpcConfiguration::
+    ~IpcConfiguration ()
+    {
+    }
+
+    bool
+    operator== (const IpcConfiguration& x, const IpcConfiguration& y)
+    {
+      if (!(x.commType () == y.commType ()))
+        return false;
+
+      if (!(x.timeout () == y.timeout ()))
+        return false;
+
+      return true;
+    }
+
+    bool
+    operator!= (const IpcConfiguration& x, const IpcConfiguration& y)
+    {
+      return !(x == y);
+    }
+
+    // LoggingConfiguration
+    //
+
+    const LoggingConfiguration::loggingDirectory_type LoggingConfiguration::loggingDirectory_default_value_ (
+      "");
+
+    LoggingConfiguration::
+    LoggingConfiguration ()
+    : ::xml_schema::type (),
+      loggingDirectory_ (loggingDirectory_default_value (), this)
+    {
+    }
+
+    LoggingConfiguration::
+    LoggingConfiguration (const LoggingConfiguration& x,
+                          ::xml_schema::flags f,
+                          ::xml_schema::container* c)
+    : ::xml_schema::type (x, f, c),
+      loggingDirectory_ (x.loggingDirectory_, f, this)
+    {
+    }
+
+    LoggingConfiguration::
+    LoggingConfiguration (const ::xercesc::DOMElement& e,
+                          ::xml_schema::flags f,
+                          ::xml_schema::container* c)
+    : ::xml_schema::type (e, f | ::xml_schema::flags::base, c),
+      loggingDirectory_ (this)
+    {
+      if ((f & ::xml_schema::flags::base) == 0)
+      {
+        ::xsd::cxx::xml::dom::parser< char > p (e, false, false, true);
+        this->parse (p, f);
+      }
+    }
+
+    void LoggingConfiguration::
+    parse (::xsd::cxx::xml::dom::parser< char >& p,
+           ::xml_schema::flags f)
+    {
+      while (p.more_attributes ())
+      {
+        const ::xercesc::DOMAttr& i (p.next_attribute ());
+        const ::xsd::cxx::xml::qualified_name< char > n (
+          ::xsd::cxx::xml::dom::name< char > (i));
+
+        if (n.name () == "loggingDirectory" && n.namespace_ ().empty ())
+        {
+          this->loggingDirectory_.set (loggingDirectory_traits::create (i, f, this));
+          continue;
+        }
+      }
+
+      if (!loggingDirectory_.present ())
+      {
+        this->loggingDirectory_.set (loggingDirectory_default_value ());
+      }
+    }
+
+    LoggingConfiguration* LoggingConfiguration::
+    _clone (::xml_schema::flags f,
+            ::xml_schema::container* c) const
+    {
+      return new class LoggingConfiguration (*this, f, c);
+    }
+
+    LoggingConfiguration& LoggingConfiguration::
+    operator= (const LoggingConfiguration& x)
+    {
+      if (this != &x)
+      {
+        static_cast< ::xml_schema::type& > (*this) = x;
+        this->loggingDirectory_ = x.loggingDirectory_;
+      }
+
+      return *this;
+    }
+
+    LoggingConfiguration::
+    ~LoggingConfiguration ()
+    {
+    }
+
+    bool
+    operator== (const LoggingConfiguration& x, const LoggingConfiguration& y)
+    {
+      if (!(x.loggingDirectory () == y.loggingDirectory ()))
+        return false;
+
+      return true;
+    }
+
+    bool
+    operator!= (const LoggingConfiguration& x, const LoggingConfiguration& y)
+    {
+      return !(x == y);
+    }
   }
 }
 
@@ -462,9 +983,23 @@ namespace carousel
     }
 
     ::std::ostream&
+    operator<< (::std::ostream& o, IpcType::value i)
+    {
+      return o << IpcType::_xsd_IpcType_literals_[i];
+    }
+
+    ::std::ostream&
+    operator<< (::std::ostream& o, const IpcType& i)
+    {
+      return o << static_cast< const ::xml_schema::string& > (i);
+    }
+
+    ::std::ostream&
     operator<< (::std::ostream& o, const CarouselConfiguration& i)
     {
       o << ::std::endl << "DatabaseConfiguration: " << i.DatabaseConfiguration ();
+      o << ::std::endl << "IpcConfiguration: " << i.IpcConfiguration ();
+      o << ::std::endl << "LoggingConfiguration: " << i.LoggingConfiguration ();
       return o;
     }
 
@@ -472,6 +1007,25 @@ namespace carousel
     operator<< (::std::ostream& o, const DatabaseConfiguration& i)
     {
       o << ::std::endl << "selectedDatabase: " << i.selectedDatabase ();
+      return o;
+    }
+
+    ::std::ostream&
+    operator<< (::std::ostream& o, const IpcConfiguration& i)
+    {
+      o << ::std::endl << "commType: " << i.commType ();
+      if (i.timeout ())
+      {
+        o << ::std::endl << "timeout: " << *i.timeout ();
+      }
+
+      return o;
+    }
+
+    ::std::ostream&
+    operator<< (::std::ostream& o, const LoggingConfiguration& i)
+    {
+      o << ::std::endl << "loggingDirectory: " << i.loggingDirectory ();
       return o;
     }
   }
@@ -750,272 +1304,6 @@ namespace carousel
         "CarouselConfiguration",
         "http://carousel.com/carousel/data");
     }
-
-    ::std::unique_ptr< ::carousel::data::DatabaseConfiguration >
-    DatabaseConfiguration_ (const ::std::string& u,
-                            ::xml_schema::flags f,
-                            const ::xml_schema::properties& p)
-    {
-      ::xsd::cxx::xml::auto_initializer i (
-        (f & ::xml_schema::flags::dont_initialize) == 0,
-        (f & ::xml_schema::flags::keep_dom) == 0);
-
-      ::xsd::cxx::tree::error_handler< char > h;
-
-      ::xml_schema::dom::unique_ptr< ::xercesc::DOMDocument > d (
-        ::xsd::cxx::xml::dom::parse< char > (
-          u, h, p, f));
-
-      h.throw_if_failed< ::xsd::cxx::tree::parsing< char > > ();
-
-      return ::std::unique_ptr< ::carousel::data::DatabaseConfiguration > (
-        ::carousel::data::DatabaseConfiguration_ (
-          std::move (d), f | ::xml_schema::flags::own_dom, p));
-    }
-
-    ::std::unique_ptr< ::carousel::data::DatabaseConfiguration >
-    DatabaseConfiguration_ (const ::std::string& u,
-                            ::xml_schema::error_handler& h,
-                            ::xml_schema::flags f,
-                            const ::xml_schema::properties& p)
-    {
-      ::xsd::cxx::xml::auto_initializer i (
-        (f & ::xml_schema::flags::dont_initialize) == 0,
-        (f & ::xml_schema::flags::keep_dom) == 0);
-
-      ::xml_schema::dom::unique_ptr< ::xercesc::DOMDocument > d (
-        ::xsd::cxx::xml::dom::parse< char > (
-          u, h, p, f));
-
-      if (!d.get ())
-        throw ::xsd::cxx::tree::parsing< char > ();
-
-      return ::std::unique_ptr< ::carousel::data::DatabaseConfiguration > (
-        ::carousel::data::DatabaseConfiguration_ (
-          std::move (d), f | ::xml_schema::flags::own_dom, p));
-    }
-
-    ::std::unique_ptr< ::carousel::data::DatabaseConfiguration >
-    DatabaseConfiguration_ (const ::std::string& u,
-                            ::xercesc::DOMErrorHandler& h,
-                            ::xml_schema::flags f,
-                            const ::xml_schema::properties& p)
-    {
-      ::xml_schema::dom::unique_ptr< ::xercesc::DOMDocument > d (
-        ::xsd::cxx::xml::dom::parse< char > (
-          u, h, p, f));
-
-      if (!d.get ())
-        throw ::xsd::cxx::tree::parsing< char > ();
-
-      return ::std::unique_ptr< ::carousel::data::DatabaseConfiguration > (
-        ::carousel::data::DatabaseConfiguration_ (
-          std::move (d), f | ::xml_schema::flags::own_dom, p));
-    }
-
-    ::std::unique_ptr< ::carousel::data::DatabaseConfiguration >
-    DatabaseConfiguration_ (::std::istream& is,
-                            ::xml_schema::flags f,
-                            const ::xml_schema::properties& p)
-    {
-      ::xsd::cxx::xml::auto_initializer i (
-        (f & ::xml_schema::flags::dont_initialize) == 0,
-        (f & ::xml_schema::flags::keep_dom) == 0);
-
-      ::xsd::cxx::xml::sax::std_input_source isrc (is);
-      return ::carousel::data::DatabaseConfiguration_ (isrc, f, p);
-    }
-
-    ::std::unique_ptr< ::carousel::data::DatabaseConfiguration >
-    DatabaseConfiguration_ (::std::istream& is,
-                            ::xml_schema::error_handler& h,
-                            ::xml_schema::flags f,
-                            const ::xml_schema::properties& p)
-    {
-      ::xsd::cxx::xml::auto_initializer i (
-        (f & ::xml_schema::flags::dont_initialize) == 0,
-        (f & ::xml_schema::flags::keep_dom) == 0);
-
-      ::xsd::cxx::xml::sax::std_input_source isrc (is);
-      return ::carousel::data::DatabaseConfiguration_ (isrc, h, f, p);
-    }
-
-    ::std::unique_ptr< ::carousel::data::DatabaseConfiguration >
-    DatabaseConfiguration_ (::std::istream& is,
-                            ::xercesc::DOMErrorHandler& h,
-                            ::xml_schema::flags f,
-                            const ::xml_schema::properties& p)
-    {
-      ::xsd::cxx::xml::sax::std_input_source isrc (is);
-      return ::carousel::data::DatabaseConfiguration_ (isrc, h, f, p);
-    }
-
-    ::std::unique_ptr< ::carousel::data::DatabaseConfiguration >
-    DatabaseConfiguration_ (::std::istream& is,
-                            const ::std::string& sid,
-                            ::xml_schema::flags f,
-                            const ::xml_schema::properties& p)
-    {
-      ::xsd::cxx::xml::auto_initializer i (
-        (f & ::xml_schema::flags::dont_initialize) == 0,
-        (f & ::xml_schema::flags::keep_dom) == 0);
-
-      ::xsd::cxx::xml::sax::std_input_source isrc (is, sid);
-      return ::carousel::data::DatabaseConfiguration_ (isrc, f, p);
-    }
-
-    ::std::unique_ptr< ::carousel::data::DatabaseConfiguration >
-    DatabaseConfiguration_ (::std::istream& is,
-                            const ::std::string& sid,
-                            ::xml_schema::error_handler& h,
-                            ::xml_schema::flags f,
-                            const ::xml_schema::properties& p)
-    {
-      ::xsd::cxx::xml::auto_initializer i (
-        (f & ::xml_schema::flags::dont_initialize) == 0,
-        (f & ::xml_schema::flags::keep_dom) == 0);
-
-      ::xsd::cxx::xml::sax::std_input_source isrc (is, sid);
-      return ::carousel::data::DatabaseConfiguration_ (isrc, h, f, p);
-    }
-
-    ::std::unique_ptr< ::carousel::data::DatabaseConfiguration >
-    DatabaseConfiguration_ (::std::istream& is,
-                            const ::std::string& sid,
-                            ::xercesc::DOMErrorHandler& h,
-                            ::xml_schema::flags f,
-                            const ::xml_schema::properties& p)
-    {
-      ::xsd::cxx::xml::sax::std_input_source isrc (is, sid);
-      return ::carousel::data::DatabaseConfiguration_ (isrc, h, f, p);
-    }
-
-    ::std::unique_ptr< ::carousel::data::DatabaseConfiguration >
-    DatabaseConfiguration_ (::xercesc::InputSource& i,
-                            ::xml_schema::flags f,
-                            const ::xml_schema::properties& p)
-    {
-      ::xsd::cxx::tree::error_handler< char > h;
-
-      ::xml_schema::dom::unique_ptr< ::xercesc::DOMDocument > d (
-        ::xsd::cxx::xml::dom::parse< char > (
-          i, h, p, f));
-
-      h.throw_if_failed< ::xsd::cxx::tree::parsing< char > > ();
-
-      return ::std::unique_ptr< ::carousel::data::DatabaseConfiguration > (
-        ::carousel::data::DatabaseConfiguration_ (
-          std::move (d), f | ::xml_schema::flags::own_dom, p));
-    }
-
-    ::std::unique_ptr< ::carousel::data::DatabaseConfiguration >
-    DatabaseConfiguration_ (::xercesc::InputSource& i,
-                            ::xml_schema::error_handler& h,
-                            ::xml_schema::flags f,
-                            const ::xml_schema::properties& p)
-    {
-      ::xml_schema::dom::unique_ptr< ::xercesc::DOMDocument > d (
-        ::xsd::cxx::xml::dom::parse< char > (
-          i, h, p, f));
-
-      if (!d.get ())
-        throw ::xsd::cxx::tree::parsing< char > ();
-
-      return ::std::unique_ptr< ::carousel::data::DatabaseConfiguration > (
-        ::carousel::data::DatabaseConfiguration_ (
-          std::move (d), f | ::xml_schema::flags::own_dom, p));
-    }
-
-    ::std::unique_ptr< ::carousel::data::DatabaseConfiguration >
-    DatabaseConfiguration_ (::xercesc::InputSource& i,
-                            ::xercesc::DOMErrorHandler& h,
-                            ::xml_schema::flags f,
-                            const ::xml_schema::properties& p)
-    {
-      ::xml_schema::dom::unique_ptr< ::xercesc::DOMDocument > d (
-        ::xsd::cxx::xml::dom::parse< char > (
-          i, h, p, f));
-
-      if (!d.get ())
-        throw ::xsd::cxx::tree::parsing< char > ();
-
-      return ::std::unique_ptr< ::carousel::data::DatabaseConfiguration > (
-        ::carousel::data::DatabaseConfiguration_ (
-          std::move (d), f | ::xml_schema::flags::own_dom, p));
-    }
-
-    ::std::unique_ptr< ::carousel::data::DatabaseConfiguration >
-    DatabaseConfiguration_ (const ::xercesc::DOMDocument& doc,
-                            ::xml_schema::flags f,
-                            const ::xml_schema::properties& p)
-    {
-      if (f & ::xml_schema::flags::keep_dom)
-      {
-        ::xml_schema::dom::unique_ptr< ::xercesc::DOMDocument > d (
-          static_cast< ::xercesc::DOMDocument* > (doc.cloneNode (true)));
-
-        return ::std::unique_ptr< ::carousel::data::DatabaseConfiguration > (
-          ::carousel::data::DatabaseConfiguration_ (
-            std::move (d), f | ::xml_schema::flags::own_dom, p));
-      }
-
-      const ::xercesc::DOMElement& e (*doc.getDocumentElement ());
-      const ::xsd::cxx::xml::qualified_name< char > n (
-        ::xsd::cxx::xml::dom::name< char > (e));
-
-      if (n.name () == "DatabaseConfiguration" &&
-          n.namespace_ () == "http://carousel.com/carousel/data")
-      {
-        ::std::unique_ptr< ::carousel::data::DatabaseConfiguration > r (
-          ::xsd::cxx::tree::traits< ::carousel::data::DatabaseConfiguration, char >::create (
-            e, f, 0));
-        return r;
-      }
-
-      throw ::xsd::cxx::tree::unexpected_element < char > (
-        n.name (),
-        n.namespace_ (),
-        "DatabaseConfiguration",
-        "http://carousel.com/carousel/data");
-    }
-
-    ::std::unique_ptr< ::carousel::data::DatabaseConfiguration >
-    DatabaseConfiguration_ (::xml_schema::dom::unique_ptr< ::xercesc::DOMDocument > d,
-                            ::xml_schema::flags f,
-                            const ::xml_schema::properties&)
-    {
-      ::xml_schema::dom::unique_ptr< ::xercesc::DOMDocument > c (
-        ((f & ::xml_schema::flags::keep_dom) &&
-         !(f & ::xml_schema::flags::own_dom))
-        ? static_cast< ::xercesc::DOMDocument* > (d->cloneNode (true))
-        : 0);
-
-      ::xercesc::DOMDocument& doc (c.get () ? *c : *d);
-      const ::xercesc::DOMElement& e (*doc.getDocumentElement ());
-
-      const ::xsd::cxx::xml::qualified_name< char > n (
-        ::xsd::cxx::xml::dom::name< char > (e));
-
-      if (f & ::xml_schema::flags::keep_dom)
-        doc.setUserData (::xml_schema::dom::tree_node_key,
-                         (c.get () ? &c : &d),
-                         0);
-
-      if (n.name () == "DatabaseConfiguration" &&
-          n.namespace_ () == "http://carousel.com/carousel/data")
-      {
-        ::std::unique_ptr< ::carousel::data::DatabaseConfiguration > r (
-          ::xsd::cxx::tree::traits< ::carousel::data::DatabaseConfiguration, char >::create (
-            e, f, 0));
-        return r;
-      }
-
-      throw ::xsd::cxx::tree::unexpected_element < char > (
-        n.name (),
-        n.namespace_ (),
-        "DatabaseConfiguration",
-        "http://carousel.com/carousel/data");
-    }
   }
 }
 
@@ -1176,154 +1464,6 @@ namespace carousel
     }
 
     void
-    DatabaseConfiguration_ (::std::ostream& o,
-                            const ::carousel::data::DatabaseConfiguration& s,
-                            const ::xml_schema::namespace_infomap& m,
-                            const ::std::string& e,
-                            ::xml_schema::flags f)
-    {
-      ::xsd::cxx::xml::auto_initializer i (
-        (f & ::xml_schema::flags::dont_initialize) == 0);
-
-      ::xml_schema::dom::unique_ptr< ::xercesc::DOMDocument > d (
-        ::carousel::data::DatabaseConfiguration_ (s, m, f));
-
-      ::xsd::cxx::tree::error_handler< char > h;
-
-      ::xsd::cxx::xml::dom::ostream_format_target t (o);
-      if (!::xsd::cxx::xml::dom::serialize (t, *d, e, h, f))
-      {
-        h.throw_if_failed< ::xsd::cxx::tree::serialization< char > > ();
-      }
-    }
-
-    void
-    DatabaseConfiguration_ (::std::ostream& o,
-                            const ::carousel::data::DatabaseConfiguration& s,
-                            ::xml_schema::error_handler& h,
-                            const ::xml_schema::namespace_infomap& m,
-                            const ::std::string& e,
-                            ::xml_schema::flags f)
-    {
-      ::xsd::cxx::xml::auto_initializer i (
-        (f & ::xml_schema::flags::dont_initialize) == 0);
-
-      ::xml_schema::dom::unique_ptr< ::xercesc::DOMDocument > d (
-        ::carousel::data::DatabaseConfiguration_ (s, m, f));
-      ::xsd::cxx::xml::dom::ostream_format_target t (o);
-      if (!::xsd::cxx::xml::dom::serialize (t, *d, e, h, f))
-      {
-        throw ::xsd::cxx::tree::serialization< char > ();
-      }
-    }
-
-    void
-    DatabaseConfiguration_ (::std::ostream& o,
-                            const ::carousel::data::DatabaseConfiguration& s,
-                            ::xercesc::DOMErrorHandler& h,
-                            const ::xml_schema::namespace_infomap& m,
-                            const ::std::string& e,
-                            ::xml_schema::flags f)
-    {
-      ::xml_schema::dom::unique_ptr< ::xercesc::DOMDocument > d (
-        ::carousel::data::DatabaseConfiguration_ (s, m, f));
-      ::xsd::cxx::xml::dom::ostream_format_target t (o);
-      if (!::xsd::cxx::xml::dom::serialize (t, *d, e, h, f))
-      {
-        throw ::xsd::cxx::tree::serialization< char > ();
-      }
-    }
-
-    void
-    DatabaseConfiguration_ (::xercesc::XMLFormatTarget& t,
-                            const ::carousel::data::DatabaseConfiguration& s,
-                            const ::xml_schema::namespace_infomap& m,
-                            const ::std::string& e,
-                            ::xml_schema::flags f)
-    {
-      ::xml_schema::dom::unique_ptr< ::xercesc::DOMDocument > d (
-        ::carousel::data::DatabaseConfiguration_ (s, m, f));
-
-      ::xsd::cxx::tree::error_handler< char > h;
-
-      if (!::xsd::cxx::xml::dom::serialize (t, *d, e, h, f))
-      {
-        h.throw_if_failed< ::xsd::cxx::tree::serialization< char > > ();
-      }
-    }
-
-    void
-    DatabaseConfiguration_ (::xercesc::XMLFormatTarget& t,
-                            const ::carousel::data::DatabaseConfiguration& s,
-                            ::xml_schema::error_handler& h,
-                            const ::xml_schema::namespace_infomap& m,
-                            const ::std::string& e,
-                            ::xml_schema::flags f)
-    {
-      ::xml_schema::dom::unique_ptr< ::xercesc::DOMDocument > d (
-        ::carousel::data::DatabaseConfiguration_ (s, m, f));
-      if (!::xsd::cxx::xml::dom::serialize (t, *d, e, h, f))
-      {
-        throw ::xsd::cxx::tree::serialization< char > ();
-      }
-    }
-
-    void
-    DatabaseConfiguration_ (::xercesc::XMLFormatTarget& t,
-                            const ::carousel::data::DatabaseConfiguration& s,
-                            ::xercesc::DOMErrorHandler& h,
-                            const ::xml_schema::namespace_infomap& m,
-                            const ::std::string& e,
-                            ::xml_schema::flags f)
-    {
-      ::xml_schema::dom::unique_ptr< ::xercesc::DOMDocument > d (
-        ::carousel::data::DatabaseConfiguration_ (s, m, f));
-      if (!::xsd::cxx::xml::dom::serialize (t, *d, e, h, f))
-      {
-        throw ::xsd::cxx::tree::serialization< char > ();
-      }
-    }
-
-    void
-    DatabaseConfiguration_ (::xercesc::DOMDocument& d,
-                            const ::carousel::data::DatabaseConfiguration& s,
-                            ::xml_schema::flags)
-    {
-      ::xercesc::DOMElement& e (*d.getDocumentElement ());
-      const ::xsd::cxx::xml::qualified_name< char > n (
-        ::xsd::cxx::xml::dom::name< char > (e));
-
-      if (n.name () == "DatabaseConfiguration" &&
-          n.namespace_ () == "http://carousel.com/carousel/data")
-      {
-        e << s;
-      }
-      else
-      {
-        throw ::xsd::cxx::tree::unexpected_element < char > (
-          n.name (),
-          n.namespace_ (),
-          "DatabaseConfiguration",
-          "http://carousel.com/carousel/data");
-      }
-    }
-
-    ::xml_schema::dom::unique_ptr< ::xercesc::DOMDocument >
-    DatabaseConfiguration_ (const ::carousel::data::DatabaseConfiguration& s,
-                            const ::xml_schema::namespace_infomap& m,
-                            ::xml_schema::flags f)
-    {
-      ::xml_schema::dom::unique_ptr< ::xercesc::DOMDocument > d (
-        ::xsd::cxx::xml::dom::serialize< char > (
-          "DatabaseConfiguration",
-          "http://carousel.com/carousel/data",
-          m, f));
-
-      ::carousel::data::DatabaseConfiguration_ (*d, s, f);
-      return d;
-    }
-
-    void
     operator<< (::xercesc::DOMElement& e, const DatabaseType& i)
     {
       e << static_cast< const ::xml_schema::string& > (i);
@@ -1338,6 +1478,25 @@ namespace carousel
     void
     operator<< (::xml_schema::list_stream& l,
                 const DatabaseType& i)
+    {
+      l << static_cast< const ::xml_schema::string& > (i);
+    }
+
+    void
+    operator<< (::xercesc::DOMElement& e, const IpcType& i)
+    {
+      e << static_cast< const ::xml_schema::string& > (i);
+    }
+
+    void
+    operator<< (::xercesc::DOMAttr& a, const IpcType& i)
+    {
+      a << static_cast< const ::xml_schema::string& > (i);
+    }
+
+    void
+    operator<< (::xml_schema::list_stream& l,
+                const IpcType& i)
     {
       l << static_cast< const ::xml_schema::string& > (i);
     }
@@ -1358,6 +1517,30 @@ namespace carousel
 
         s << i.DatabaseConfiguration ();
       }
+
+      // IpcConfiguration
+      //
+      {
+        ::xercesc::DOMElement& s (
+          ::xsd::cxx::xml::dom::create_element (
+            "IpcConfiguration",
+            "http://carousel.com/carousel/data",
+            e));
+
+        s << i.IpcConfiguration ();
+      }
+
+      // LoggingConfiguration
+      //
+      {
+        ::xercesc::DOMElement& s (
+          ::xsd::cxx::xml::dom::create_element (
+            "LoggingConfiguration",
+            "http://carousel.com/carousel/data",
+            e));
+
+        s << i.LoggingConfiguration ();
+      }
     }
 
     void
@@ -1368,13 +1551,58 @@ namespace carousel
       // selectedDatabase
       //
       {
-        ::xercesc::DOMElement& s (
-          ::xsd::cxx::xml::dom::create_element (
+        ::xercesc::DOMAttr& a (
+          ::xsd::cxx::xml::dom::create_attribute (
             "selectedDatabase",
-            "http://carousel.com/carousel/data",
             e));
 
-        s << i.selectedDatabase ();
+        a << i.selectedDatabase ();
+      }
+    }
+
+    void
+    operator<< (::xercesc::DOMElement& e, const IpcConfiguration& i)
+    {
+      e << static_cast< const ::xml_schema::type& > (i);
+
+      // commType
+      //
+      {
+        ::xercesc::DOMAttr& a (
+          ::xsd::cxx::xml::dom::create_attribute (
+            "commType",
+            e));
+
+        a << i.commType ();
+      }
+
+      // timeout
+      //
+      if (i.timeout ())
+      {
+        ::xercesc::DOMAttr& a (
+          ::xsd::cxx::xml::dom::create_attribute (
+            "timeout",
+            e));
+
+        a << *i.timeout ();
+      }
+    }
+
+    void
+    operator<< (::xercesc::DOMElement& e, const LoggingConfiguration& i)
+    {
+      e << static_cast< const ::xml_schema::type& > (i);
+
+      // loggingDirectory
+      //
+      {
+        ::xercesc::DOMAttr& a (
+          ::xsd::cxx::xml::dom::create_attribute (
+            "loggingDirectory",
+            e));
+
+        a << i.loggingDirectory ();
       }
     }
   }

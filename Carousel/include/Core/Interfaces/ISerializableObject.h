@@ -20,6 +20,11 @@ namespace carousel
 			/// Loads from xml file
 			/// </summary>
 			virtual void loadFromXml(const std::string& filepath) = 0;
+
+			/// <summary>
+			/// Returns xml formatted data
+			/// </summary>
+			virtual std::string serialize() = 0;
 		};
 	}
 }
