@@ -59,10 +59,10 @@ namespace carousel
 			/// </summary>
 			void operator=(const Configurations&) = delete;
 
+			/// <tag>#pythonSingleton</tag>
 			/// <summary>
 			/// Gets the configurations object
 			/// </summary>
-			/// <tag>#pythonSingleton</tag>
 			static Configurations& instance()
 			{
 				static Configurations _config;
@@ -97,10 +97,10 @@ namespace carousel
 				return DatabaseTypeToString(_model.DatabaseConfiguration().selectedDatabase());
 			}
 
+			/// <tag>#pythonProperty</tag>
 			/// <summary>
 			/// Set the database directive
 			/// </summary>
-			/// <tag>#pythonProperty</tag>
 			void setSelectedDatabaseString(const std::string& databaseSelection)
 			{
 				_model.DatabaseConfiguration().selectedDatabase(stringToDatabaseType(databaseSelection));

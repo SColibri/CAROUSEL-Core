@@ -29,6 +29,7 @@ execute_process(
 					${CMAKE_CURRENT_SOURCE_DIR}/include/Data/Models/*.h
 					${CMAKE_CURRENT_SOURCE_DIR}/include/Core/BaseTypes/CarouselSandbox.h
 					${CMAKE_CURRENT_SOURCE_DIR}/include/Logging/CarouselLogger.h
+					${CMAKE_CURRENT_SOURCE_DIR}/include/IpcTools/IpcPipeHandler.h
 	RESULT_VARIABLE bindingResult
 )
 

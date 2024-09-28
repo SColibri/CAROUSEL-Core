@@ -91,6 +91,7 @@ namespace carousel
 
 		public: // IpcPipeHandler
 
+			/// <tag>#pythonConstructor</tag>
 			/// <summary>
 			/// Constructor
 			/// </summary>

@@ -4,6 +4,7 @@
 #include "..\Data\Models\Project.h"
 #include "..\Core\BaseTypes\CarouselSandbox.h"
 #include "..\Logging\CarouselLogger.h"
+#include "..\IpcTools\IpcPipeHandler.h"
 
 namespace carousel 
  {
@@ -24,8 +25,6 @@ namespace carousel
 		        .def_property("Name", &carousel::data::Project::getName, &carousel::data::Project::setName)
 		        .def_property("ApiName", &carousel::data::Project::getApiName, &carousel::data::Project::setApiName)
 		        .def_property("SoftwareName", &carousel::data::Project::getSoftwareName, &carousel::data::Project::setSoftwareName)
-		        .def("load", &carousel::data::Project::load, pybind11::arg("rawData"))
-		        .def("get_table_structure", &carousel::data::Project::get_table_structure)
 		        ;
 
 			// CarouselSandbox - python embedding 
@@ -41,6 +40,12 @@ namespace carousel
 		        .def("debug", &carousel::logging::CarouselLogger::debug, pybind11::arg("message"))
 		        .def("error", &carousel::logging::CarouselLogger::error, pybind11::arg("message"))
 		        .def("warning", &carousel::logging::CarouselLogger::warning, pybind11::arg("message"))
+		        ;
+
+			// IpcPipeHandler - python embedding 
+		    pybind11::class_<carousel::ipcTools::IpcPipeHandler>(carouselModule, "IpcPipeHandler")
+		        .def(pybind11::init<>())
+		        .def("IpcPipeHandler", &carousel::ipcTools::IpcPipeHandler::IpcPipeHandler, pybind11::arg("pathToExe"),pybind11::arg("endFlag"),pybind11::arg("parameters"),pybind11::arg("timeout"))
 		        ;
 		}
 	}

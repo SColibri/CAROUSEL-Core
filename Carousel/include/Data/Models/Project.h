@@ -49,11 +49,11 @@ namespace carousel
 			/// <returns></returns>
 			const int& getId() { return _model.Id().get(); }
 
+			/// <tag>#pythonProperty</tag>
 			/// <summary>
 			/// Set Id
 			/// </summary>
 			/// <param name="newValue"></param>
-			/// <tag>#pythonProperty</tag>
 			void setId(const int& newValue) { _model.Id().set(newValue); }
 
 			/// <summary>
@@ -62,11 +62,11 @@ namespace carousel
 			/// <returns></returns>
 			const std::string& getName() { return _model.Name().get(); }
 
+			/// <tag>#pythonProperty</tag>
 			/// <summary>
 			/// Set name
 			/// </summary>
 			/// <param name="newName"></param>
-			/// <tag>#pythonProperty</tag>
 			void setName(const std::string& newName) { _model.Name().set(newName); }
 
 			/// <summary>
@@ -75,11 +75,11 @@ namespace carousel
 			/// <returns></returns>
 			const std::string& getApiName() { return _model.ApiName().get(); }
 
+			/// <tag>#pythonProperty</tag>
 			/// <summary>
 			/// Set api name that is being used
 			/// </summary>
 			/// <param name="newName"></param>
-			/// <tag>#pythonProperty</tag>
 			void setApiName(const std::string& newName) { _model.ApiName().set(newName); }
 
 			/// <summary>
@@ -88,18 +88,15 @@ namespace carousel
 			/// <returns></returns>
 			const std::string& getSoftwareName() { return _model.SoftwareName().get(); }
 
+			/// <tag>#pythonProperty</tag>
 			/// <summary>
 			/// Set name of software used for all calculations
 			/// </summary>
 			/// <param name="newName"></param>
-			/// <tag>#pythonProperty</tag>
 			void setSoftwareName(const std::string& newName) { _model.SoftwareName().set(newName); }
 
 		public: // IDatabaseObject implementation
 
-			/// <summary>
-			/// 
-			/// </summary>
 			/// <tag>#pythonMethod</tag>
 			virtual int load(std::vector<std::string>& rawData) override
 			{
@@ -113,9 +110,6 @@ namespace carousel
 				return 0;
 			}
 
-			/// <summary>
-			/// 
-			/// </summary>
 			/// <tag>#pythonMethod</tag>
 			virtual carousel::data::DatabaseTable& get_table_structure() override
 			{

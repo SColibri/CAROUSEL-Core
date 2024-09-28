@@ -10,6 +10,7 @@
 # - #pythonMethod ; Exposes method to python (Note: for now only allows one parameter)
 # - #pythonProperty ; Exposes the get/set methods as a class property
 # - #pythonSingleton ; Exposes the get/set singleton Instance
+# - #pythonConstructor ; Exposes the get/set singleton Instance
 # -----------------------------------------------------------------------------
 
 # Imports
@@ -23,20 +24,29 @@ import os
 
 # Define a function to convert a match to a dictionary
 def match_to_dict(match):
+    
+    # Extract all parameters
+    parameterTypes = []
+    parameterNames = []
+    parameterPythonTypes = []
+
+    if match[9]:
+        allParameters = re.findall(r'([a-zA-Z_][a-zA-Z0-9_<>:*&\s]+)\s+([a-zA-Z_][a-zA-Z0-9_]+)', match[9])
+        parameterTypes = [param[0] for param in allParameters]
+        parameterNames = [param[1] for param in allParameters]
+        parameterPythonTypes = [get_python_type(param) for param in parameterTypes]
+
     return {
-        'summary': match[0],
-        'additional_info_01': match[1],
-        'parameters': match[2],
-        'parameter_info': match[3],
-        'parameter_description': match[4],
-        'tag_section': match[5],
-        'tag': match[6],
+        'tag_section': match[0],
+        'tag': match[1],
+        'summary': match[2],
         'return_type': match[7],
         'method_name': match[8],
-        'parameter_type': match[9],
-        'parameter_name': match[10],
+        'parameter_description': match[6],
+        'parameter_types': parameterTypes,
+        'parameter_names': parameterNames,
         'return_python_type' : get_python_type(match[7]),
-        'parameter_python_type': get_python_type(match[9])
+        'parameter_python_types': parameterPythonTypes
     }
 
 # Packs all required data for generating the embedded python files into one dictionary
@@ -49,19 +59,21 @@ def pack_data(filename, outputDirectory):
     mappedMethods = [result for result in mappedResults if '#pythonMethod' in result['tag']]
     mappedProperties = [result for result in mappedResults if '#pythonProperty' in result['tag']]
     singletonAccess = next((result for result in mappedResults if '#pythonSingleton' in result['tag']), None) #TODO: Silent error if multiple singletons are defined
+    constructorMethod = next((result for result in mappedResults if '#pythonConstructor' in result['tag']), None) #TODO: Silent error if multiple singletons are defined, also only one constructor allowed
     
     classNamespace = get_namespace(content)
     
     return {
         'mappedResults' : mappedResults,
         'mappedMethods' : mappedMethods, 
-        'mappedProperties' : mappedProperties, 
+        'mappedProperties' : mappedProperties,
         'className' : get_class_name(content), 
         'classDescription' : get_class_description(content), 
         'outputFile' : outputDirectory + '/' + namespace_to_camel_case(classNamespace) + 'PythonBindings' , 
         'headerInclude' : get_relative_path(filename, outputDirectory),
         'namespace' : classNamespace,
-        'singletonAccess' : singletonAccess
+        'singletonAccess' : singletonAccess,
+        'constructorMethod' : constructorMethod
     }
     
 # Returns the direct 
@@ -142,27 +154,21 @@ def namespace_to_camel_case(input_str):
 
 # Returns a list of all required imports
 def get_list_of_imports(mappedList):
-    importList = set() 
+    importList = {get_import(item.get('return_python_type')) for item in mappedList if item.get('return_python_type')}
     
-    # Iterate over mappedList and add imports only if they are required
     for item in mappedList:
-        for key in ['return_python_type', 'parameter_python_type']:
-            pythonType = item.get(key)
-            if pythonType: 
-                requiredImport = get_import(pythonType)
-                if requiredImport:  
-                    importList.add(requiredImport)
+        importList.update({get_import(t) for t in item.get('parameter_python_types', []) if t})
     
-    return list(importList)
+    return list(importList - {None})
 
 # returns mapped properties and methods
 def get_mapped_items(content):
     # Find all tags
-    allMethods = re.findall(r'\/\/\/\s*<summary>\s*([\s\S]*?)\s*\/\/\/\s<\/summary>\s+(\/\/\/\s<returns>(.*?)<\/returns>\s+)?(\/\/\/\s<param(.*?)<\/param>\s+)?(\/\/\/\s<tag(.*?)<\/tag>\s+)?(.*?)(\w+)\((.*?)(\w+)?\)', content)
+    allMethods = re.findall(r'(\/\/\/\s<tag(.*?)<\/tag>\s+)\/\/\/\s*<summary>\s*([\s\S]*?)\s*\/\/\/\s<\/summary>\s+(\/\/\/\s<returns>(.*?)<\/returns>\s+)?(\/\/\/\s<param(.*?)<\/param>\s+)?(.*?)(\w+)\((.*?)\)', content)
 
     # Map al matches into a dictionary
     mappedResults = [match_to_dict(match) for match in allMethods]
-    
+    print(mappedResults)
     return mappedResults
 
 # returns the pybind11 class deifintion that exposes a c++ class to python
@@ -172,16 +178,22 @@ def get_pybind_class_definition(file, data):
     # Add default constructor
     if data['singletonAccess']:
         file.write(f'\t\t        .def_static(\"{data["singletonAccess"]["method_name"]}\", &{data["namespace"]}::{data["className"]}::{data["singletonAccess"]["method_name"]}, pybind11::return_value_policy::reference)\n')
+    elif data['constructorMethod']:
+        
+        file.write('\t\t        .def(pybind11::init<>())\n')
     else:
         file.write('\t\t        .def(pybind11::init<>())\n')
+
+    
+        
 
     # Add properties 
     for mappedProperty in data['mappedProperties']:
         methodName = mappedProperty['method_name']
-        parameterName = mappedProperty['parameter_name']
+        parameterNames = mappedProperty['parameter_names']
         
         # Setter method should have one parameter
-        if not parameterName:
+        if not parameterNames:
             raise Exception(f'Property tag #pythonProperty should be set on a set method with one parameter: Method - {methodName} || {data["namespace"]}::{data["className"]}')
 
         lineToAdd = f"\t\t        .def_property(\"{methodName.replace('set','')}\", &{data['namespace']}::{data['className']}::{methodName.replace('set', 'get')}, &{data['namespace']}::{data['className']}::{methodName})\n"
@@ -190,10 +202,12 @@ def get_pybind_class_definition(file, data):
     # Add method matches (TODO: do we need more than one parameter?)
     for mappedMethod in data['mappedMethods']:
         methodName = mappedMethod['method_name']
-        parameterName = mappedMethod['parameter_name']
+        parameterNames = mappedMethod['parameter_names']
         
-        if parameterName:
-            lineToAdd = f"\t\t        .def(\"{methodName}\", &{data['namespace']}::{data['className']}::{methodName}, pybind11::arg(\"{parameterName}\"))\n"
+        print(f'parameter names are {parameterNames}')
+        if parameterNames:
+            parameterString = ",".join([f'pybind11::arg(\"{parameterName}\")' for parameterName in parameterNames])
+            lineToAdd = f"\t\t        .def(\"{methodName}\", &{data['namespace']}::{data['className']}::{methodName}, {parameterString})\n"
         else:
             lineToAdd = f"\t\t        .def(\"{methodName}\", &{data['namespace']}::{data['className']}::{methodName})\n"
         file.write(lineToAdd)
@@ -228,13 +242,13 @@ def get_python_class_definition(file, data):
     # Add Methods (TODO: do we need more than one parameter?)
     for mappedMethod in data['mappedMethods']:
         methodName = mappedMethod['method_name']
-        parameterName = mappedMethod['parameter_name']
+        parameterNames = mappedMethod['parameter_names']
         methodDescription = mappedMethod['summary']
         
-        if not parameterName:
+        if not parameterNames:
             file.write(f'\tdef {methodName}(self): ...\n')
         else:
-            parameterType = get_python_type(mappedMethod['parameter_type']);
+            parameterType = get_python_type(mappedMethod['parameter_types']);
 
             file.write(f'\tdef {methodName}(self, {parameterName} : {parameterType}): ... \n')
         
@@ -252,7 +266,8 @@ outputFile = outputDirectory + '/' + moduleName + 'PythonBindings.h'
 
 # read all files and pack details
 toEmbeddData = [pack_data(filename, outputDirectory) for filename in headerFile]
-    
+
+
 # Create binding file
 with open(outputFile, 'w') as file:
     

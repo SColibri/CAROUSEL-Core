@@ -106,10 +106,10 @@ namespace carousel
 			/// </summary>
 			void operator=(const CarouselLogger&) = delete;
 
+			/// <tag>#pythonSingleton</tag>
 			/// <summary>
 			/// Gets the logger object
 			/// </summary>
-			/// <tag>#pythonSingleton</tag>
 			static CarouselLogger& instance()
 			{
 				static CarouselLogger _logger;
@@ -118,11 +118,11 @@ namespace carousel
 
 		public:
 
+			/// <tag>#pythonMethod</tag>
 			/// <summary>
 			/// Log info
 			/// </summary>
 			/// <param name="message">Info message</param>
-			/// <tag>#pythonMethod</tag>
 			void Info(const std::string& message)
 			{
 				if (_isInitialized)
@@ -132,11 +132,11 @@ namespace carousel
 				}
 			}
 
+			/// <tag>#pythonMethod</tag>
 			/// <summary>
 			/// Log debug
 			/// </summary>
 			/// <param name="message">Debug message</param>
-			/// <tag>#pythonMethod</tag>
 			void debug(const std::string& message)
 			{
 				if (_isInitialized)
@@ -146,11 +146,11 @@ namespace carousel
 				}
 			}
 
+			/// <tag>#pythonMethod</tag>
 			/// <summary>
 			/// Log error
 			/// </summary>
 			/// <param name="message">Error message</param>
-			/// <tag>#pythonMethod</tag>
 			void error(const std::string& message)
 			{
 				if (_isInitialized)
@@ -160,11 +160,11 @@ namespace carousel
 				}
 			}
 
+			/// <tag>#pythonMethod</tag>
 			/// <summary>
 			/// Log warning
 			/// </summary>
 			/// <param name="message">Warning message</param>
-			/// <tag>#pythonMethod</tag>
 			void warning(const std::string& message)
 			{
 				if (_isInitialized)
